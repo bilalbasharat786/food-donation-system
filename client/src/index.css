@@ -1,0 +1,322 @@
+
+Reset + Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(120deg, #fdfbfb, #ebedee);
+  color: #2b2d42;
+  line-height: 1.6;
+  font-size: 15px;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #22223b;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+h1 { font-size: 32px; margin-bottom: 15px; }
+h2 { font-size: 22px; margin-bottom: 10px; }
+h3 { font-size: 18px; margin-bottom: 8px; }
+
+/* Navbar */
+nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 26px;
+  background: linear-gradient(90deg, #2ec4b6, #1b9aaa, #178e85);
+  color: white;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  animation: slideDown 0.6s ease;
+}
+nav button {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+nav button:hover {
+  background: rgba(255,255,255,0.35);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: fadeUp 0.5s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+}
+
+/* Forms */
+form {
+  display: grid;
+  gap: 14px;
+}
+form label {
+  font-weight: 600;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+}
+form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+form input:focus {
+  border-color: #2ec4b6;
+  box-shadow: 0 0 0 3px rgba(46,196,182,0.25);
+  transform: scale(1.02);
+}
+
+/* Form grid for donors, stores, etc. */
+.donor-form, .store-form {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.donor-form .full-width,
+.store-form .full-width {
+  grid-column: 1 / -1;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(135deg, #2ec4b6, #1b9aaa);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(46,196,182,0.2);
+}
+button:hover {
+  background: linear-gradient(135deg, #28a99c, #178e85);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(27,154,170,0.35);
+}
+button:active {
+  transform: scale(0.95);
+}
+button.secondary {
+  background: linear-gradient(135deg, #ff9f1c, #ff7b00);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255,159,28,0.3);
+}
+button.secondary:hover {
+  background: linear-gradient(135deg, #e98900, #cc6f00);
+}
+
+/* Tables */
+.table-container {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 14px;
+}
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+}
+thead {
+  background: #2ec4b6;
+  color: white;
+}
+tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+tbody tr:hover {
+  background: #e6fdfb;
+  transition: 0.25s ease;
+}
+
+/* Badge */
+.badge {
+  display: inline-block;
+  background: #e0f7f4;
+  color: #1b9aaa;
+  padding: 6px 14px;
+  font-size: 13px;
+  border-radius: 24px;
+  font-weight: 600;
+  box-shadow: inset 0 0 8px rgba(27,154,170,0.25);
+  animation: pulse 2s infinite;
+}
+
+/* Toasts */
+.toast {
+  margin-top: 18px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  animation: fadeIn 0.4s ease, slideUp 0.5s ease;
+}
+.toast.success {
+  background: #e6fdf4;
+  color: #107e68;
+  border: 1px solid #b3f0dc;
+}
+.toast.error {
+  background: #ffeaea;
+  color: #d90429;
+  border: 1px solid #f5b5b5;
+}
+
+/* Summary section (Reports) */
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+.text-muted {
+  color: #777;
+}
+.center {
+  text-align: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { transform: translateY(50%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+}
+/* ---------------- Custom Select Styling (use with <div class="select-wrapper"><select class="select">...) ---------------- */
+
+.select-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  max-width: 420px; /* change as needed */
+}
+
+/* base select look (matching your gradient theme) */
+.select {
+  -webkit-appearance: none; /* remove default arrow (webkit) */
+  -moz-appearance: none;    /* remove default arrow (firefox) */
+  appearance: none;
+  width: 100%;
+  padding: 10px 40px 10px 14px; /* right padding for arrow space */
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  background: linear-gradient(180deg, #ffffff, #fbffff);
+  box-shadow: 0 4px 12px rgba(27,154,170,0.06);
+  font-size: 14px;
+  color: #22223b;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+/* focus / hover */
+.select:focus,
+.select:hover {
+  border-color: #2ec4b6;
+  box-shadow: 0 6px 18px rgba(46,196,182,0.12);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* custom arrow (using pseudo element on wrapper) */
+.select-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(-45deg, transparent 50%, #fff 50%);
+  background-size: 8px 8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.06));
+  opacity: 0.9;
+}
+
+/* alternative arrow style (match theme color) */
+.select-wrapper.arrow-accent::after {
+  background-image: linear-gradient(45deg, transparent 50%, rgba(27,154,170,0.95) 50%), linear-gradient(-45deg, transparent 50%, rgba(27,154,170,0.95) 50%);
+}
+
+/* small / compact variant */
+.select.small {
+  padding: 8px 36px 8px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+/* full-width helper */
+.select.full {
+  width: 100%;
+}
+
+/* Option styling: limited support across browsers.
+   We'll set basic colors — note: complex styles (box-shadow, pseudo) won't apply to <option> in many browsers. */
+.select option {
+  padding: 6px 8px;
+  color: #22223b;
+  background: #fff;
+}
+
+/* For a nicer looking dropdown on desktop where browsers allow it (Chrome): */
+@media (min-width: 600px) {
+  .select::-ms-expand { display: none; } /* remove IE arrow */
+}
+
+ /* Fallback note: if you need fully styled dropdown (custom scroll, icons, rich content),
+   implement a custom React dropdown (ul/li) and toggle it — suggested for production. */
