@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 70px;
+  background: linear-gradient(180deg, #1e1e2f, #252542);
+  border-right: 2px solid #00c6ff;
+  overflow-x: hidden;
+  transition: width 0.4s ease-in-out;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+.sidebar:hover {
+  width: 220px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 20px 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin: 20px 0;
+}
+
+.sidebar ul li button {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 12px 20px;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+}
+
+.sidebar ul li button .icon {
+  font-size: 22px;
+  min-width: 40px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.sidebar ul li button .text {
+  opacity: 0;
+  white-space: nowrap;
+  margin-left: 10px;
+  transition: opacity 0.4s ease;
+}
+
+.sidebar:hover ul li button .text {
+  opacity: 1;
+}
+
+.sidebar ul li button:hover {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: #fff;
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
+}
+
+.sidebar ul li button:hover .icon {
+  transform: scale(1.2) rotate(10deg);
+}
+

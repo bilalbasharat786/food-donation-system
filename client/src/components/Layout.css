@@ -1,0 +1,20 @@
+.layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  transition: margin-left 0.4s ease;
+  padding: 20px;
+}
+
+/* Jab sidebar collapse ho sirf icons visible ho */
+.main-content.normal {
+  margin-left: 70px; /* same as collapsed navbar width */
+}
+
+/* Jab sidebar expand ho full text visible ho */
+.main-content.shifted {
+  margin-left: 220px; /* same as expanded navbar width */
+}

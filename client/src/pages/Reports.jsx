@@ -1,36 +1,39 @@
 import { useState } from "react";
 import axios from "axios";
 import { useReactToPrint } from "react-to-print";
+import "./Reports.css"; // 🔥 Themed CSS
 
-export default function Reports() {
+export default function Reports({ isSidebarOpen }) {
   const [donors, setDonors] = useState([]);
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [stores, setStores] = useState([]);
   const [summary, setSummary] = useState({});
   const [active, setActive] = useState("");
 
-  // token localStorage se lo
   const token = localStorage.getItem("token");
 
   const fetchDonors = async () => {
     const res = await axios.get("http://localhost:5000/api/reports/donors", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
     setDonors(res.data);
     setActive("donors");
   };
 
   const fetchBeneficiaries = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports/beneficiaries", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const res = await axios.get(
+      "http://localhost:5000/api/reports/beneficiaries",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setBeneficiaries(res.data);
     setActive("beneficiaries");
   };
 
   const fetchStores = async () => {
     const res = await axios.get("http://localhost:5000/api/reports/stores", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
     setStores(res.data.stores);
     setSummary(res.data.summary);
@@ -42,15 +45,29 @@ export default function Reports() {
   });
 
   return (
-    <div>
-      <h1>Reports</h1>
+    <div
+      className={`reports-container ${
+        isSidebarOpen ? "shifted" : "normal"
+      }`}
+    >
+      <div className="reports-header">
+        <h1 className="page-title">📊 Reports</h1>
+      </div>
 
       {/* Buttons */}
       <div className="btn-group">
-        <button onClick={fetchDonors}>Donors Report</button>
-        <button onClick={fetchBeneficiaries}>Beneficiaries Report</button>
-        <button onClick={fetchStores}>Stores Report</button>
-        <button className="secondary" onClick={handlePrint}>Print / Export PDF</button>
+        <button className="btn" onClick={fetchDonors}>
+          Donors Report
+        </button>
+        <button className="btn" onClick={fetchBeneficiaries}>
+          Beneficiaries Report
+        </button>
+        <button className="btn" onClick={fetchStores}>
+          Stores Report
+        </button>
+        <button className="btn secondary" onClick={handlePrint}>
+          Print / Export PDF
+        </button>
       </div>
 
       {/* Report Container */}
@@ -61,7 +78,7 @@ export default function Reports() {
         {active === "donors" && (
           <>
             <h2>Donors Report</h2>
-            <table>
+            <table className="styled-table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -79,7 +96,9 @@ export default function Reports() {
                 ))}
                 {!donors.length && (
                   <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
+                    <td colSpan={3} className="text-muted center">
+                      No data
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -91,7 +110,7 @@ export default function Reports() {
         {active === "beneficiaries" && (
           <>
             <h2>Beneficiaries Report</h2>
-            <table>
+            <table className="styled-table">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -109,7 +128,9 @@ export default function Reports() {
                 ))}
                 {!beneficiaries.length && (
                   <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
+                    <td colSpan={3} className="text-muted center">
+                      No data
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -121,7 +142,7 @@ export default function Reports() {
         {active === "stores" && (
           <>
             <h2>Stores Report</h2>
-            <table>
+            <table className="styled-table">
               <thead>
                 <tr>
                   <th>Store</th>
@@ -139,7 +160,9 @@ export default function Reports() {
                 ))}
                 {!stores.length && (
                   <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
+                    <td colSpan={3} className="text-muted center">
+                      No data
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -162,5 +185,7 @@ export default function Reports() {
     </div>
   );
 }
+
+
 
 

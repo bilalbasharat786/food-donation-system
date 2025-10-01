@@ -1,8 +1,9 @@
+import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Dashboard() {
+export default function Dashboard({ isSidebarOpen }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -26,35 +27,73 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome back {user?.name}</p>
+    <div className={`dashboard-container ${isSidebarOpen ? "shifted" : "normal"}`}>
+      <div className="dashboard-header">
+        <div className="title-wrap">
+          <h1>Dashboard</h1>
+          <div className="dashboard-subtitle">Welcome back {user?.name}</div>
+        </div>
 
-      {/* Stats Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "20px" }}>
-        <div style={{ background: " #2ec4b6", color: "white", padding: "20px", borderRadius: "8px" }}>
-          <h2>{stats.donors}</h2>
-          <p>Donors</p>
-        </div>
-        <div style={{ background: "#2ec4b6", color: "white", padding: "20px", borderRadius: "8px" }}>
-          <h2>{stats.beneficiaries}</h2>
-          <p>Beneficiaries</p>
-        </div>
-        <div style={{ background: " #2ec4b6", color: "white", padding: "20px", borderRadius: "8px" }}>
-          <h2>{stats.stores}</h2>
-          <p>Stores</p>
-        </div>
-        <div style={{ background: " #2ec4b6", color: "white", padding: "20px", borderRadius: "8px" }}>
-          <h2>{stats.donations}</h2>
-          <p>Donations</p>
-        </div>
-        <div style={{ background: " #2ec4b6", color: "white", padding: "20px", borderRadius: "8px" }}>
-          <h2>{stats.distributions}</h2>
-          <p>Distributions</p>
+        <div className="user-chip">
+          <div className="user-avatar">{(user?.name || 'U').charAt(0)}</div>
+          <div className="p-muted">Signed in</div>
         </div>
       </div>
 
-     
+      {/* Stats Grid */}
+      <div className="stats-grid">
+        <div className="stat-card variant-a">
+          <div className="stat-top">
+            <div className="stat-icon">D</div>
+            <div>
+              <div className="stat-value">{stats.donors}</div>
+              <div className="stat-label">Donors</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card variant-b">
+          <div className="stat-top">
+            <div className="stat-icon">B</div>
+            <div>
+              <div className="stat-value">{stats.beneficiaries}</div>
+              <div className="stat-label">Beneficiaries</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card variant-a">
+          <div className="stat-top">
+            <div className="stat-icon">S</div>
+            <div>
+              <div className="stat-value">{stats.stores}</div>
+              <div className="stat-label">Stores</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card variant-b">
+          <div className="stat-top">
+            <div className="stat-icon">DN</div>
+            <div>
+              <div className="stat-value">{stats.donations}</div>
+              <div className="stat-label">Donations</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="stat-card variant-a">
+          <div className="stat-top">
+            <div className="stat-icon">DS</div>
+            <div>
+              <div className="stat-value">{stats.distributions}</div>
+              <div className="stat-label">Distributions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="dash-footer">You're running the themed dashboard — neat & shiny ✨</div>
     </div>
   );
 }

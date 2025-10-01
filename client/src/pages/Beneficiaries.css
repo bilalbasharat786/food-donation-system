@@ -1,0 +1,156 @@
+/* Beneficiaries.css - Same Theme as Donors */
+
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-gradient-1: #1e1e2f;
+  --bg-gradient-2: #252542;
+  --accent-a: #00c6ff;
+  --accent-b: #0072ff;
+  --accent-danger-a: #ff416c;
+  --accent-danger-b: #ff4b2b;
+  --muted: #b6bfd3;
+  --text-light: #e9f0ff;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --transition-med: 320ms;
+}
+
+.beneficiaries-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40px 28px 80px 80px;
+  background: linear-gradient(180deg, var(--bg-gradient-1), var(--bg-gradient-2));
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-light);
+  transition: margin-left var(--transition-med) ease;
+}
+
+.beneficiaries-page.shifted {
+  margin-left: 220px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+}
+
+.beneficiary-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.beneficiary-form div {
+  display: flex;
+  flex-direction: column;
+}
+
+.beneficiary-form label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.beneficiary-form input,
+.beneficiary-form select {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+}
+
+.beneficiary-form input:focus,
+.beneficiary-form select:focus {
+  outline: none;
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 10px var(--accent-a);
+}
+
+.full-width {
+  grid-column: span 2;
+  text-align: right;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, var(--accent-a), var(--accent-b));
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: linear-gradient(45deg, var(--accent-danger-a), var(--accent-danger-b));
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+table th {
+  color: var(--accent-a);
+  font-weight: 600;
+}
+
+table td {
+  color: var(--text-light);
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 500;
+}
+
+.toast.success {
+  background: linear-gradient(45deg, #27ae60, #1e8449);
+}
+
+.toast.error {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+}

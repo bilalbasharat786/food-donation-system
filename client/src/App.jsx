@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard.jsx";
 import Donors from "./pages/Donors.jsx";
 import Beneficiaries from "./pages/Beneficiaries.jsx";
@@ -15,21 +15,86 @@ import Register from "./pages/Register.jsx";
 
 export default function App() {
   return (
-      <Routes>
-        
-        {/* Auth Routes */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      {/* Auth Routes */}
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard/></Layout></ProtectedRoute>} />
-        <Route path="/donors" element={<ProtectedRoute><Layout><Donors/></Layout></ProtectedRoute>} />
-        <Route path="/beneficiaries" element={<ProtectedRoute><Layout><Beneficiaries/></Layout></ProtectedRoute>} />
-        <Route path="/stores" element={<ProtectedRoute><Layout><Stores/></Layout></ProtectedRoute>} />
-        <Route path="/donations" element={<ProtectedRoute><Layout><Donations/></Layout></ProtectedRoute>} />
-        <Route path="/distributions" element={<ProtectedRoute><Layout><Distributions/></Layout></ProtectedRoute>} />
-        <Route path="/reports" element={<ProtectedRoute><Layout><Reports/></Layout></ProtectedRoute>} />
-      </Routes>
+      {/* Protected Routes 
+          Layout ke andar hi Navbar + Sidebar state ka control hoga
+      */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/donors"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Donors />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/beneficiaries"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Beneficiaries />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stores"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Stores />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/donations"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Donations />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/distributions"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Distributions />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Reports />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
+
