@@ -1,170 +1,174 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useReactToPrint } from "react-to-print";
-import "../styles/Reports.css"; // 🔥 theme css
+import "./Stores.css"; // 👈 apna CSS link kiya
 
-export default function Reports() {
-  const [donors, setDonors] = useState([]);
-  const [beneficiaries, setBeneficiaries] = useState([]);
+export default function Stores({ isSidebarOpen }) {
   const [stores, setStores] = useState([]);
-  const [summary, setSummary] = useState({});
-  const [active, setActive] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    location: "",
+    capacityKg: "",
+    supportedFoodTypes: "",
+  });
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  const fetchDonors = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports/donors", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setDonors(res.data);
-    setActive("donors");
-  };
-
-  const fetchBeneficiaries = async () => {
-    const res = await axios.get(
-      "http://localhost:5000/api/reports/beneficiaries",
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    setBeneficiaries(res.data);
-    setActive("beneficiaries");
-  };
-
   const fetchStores = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports/stores", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setStores(res.data.stores);
-    setSummary(res.data.summary);
-    setActive("stores");
+    try {
+      const res = await axios.get("http://localhost:5000/api/stores", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setStores(res.data);
+    } catch (err) {
+      console.error("Error fetching stores:", err.response?.data || err.message);
+    }
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => document.getElementById("report-sheet"),
-  });
+  useEffect(() => {
+    fetchStores();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formattedForm = {
+      ...form,
+      capacityKg: Number(form.capacityKg),
+      supportedFoodTypes: form.supportedFoodTypes
+        .split(",")
+        .map((t) => t.trim()),
+    };
+
+    try {
+      await axios.post("http://localhost:5000/api/stores", formattedForm, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setForm({ name: "", location: "", capacityKg: "", supportedFoodTypes: "" });
+      setToast({ type: "success", text: "Store added ✅" });
+      fetchStores();
+    } catch (err) {
+      console.error("Error adding store:", err.response?.data || err.message);
+      setToast({ type: "error", text: "Failed to add store ❌" });
+    }
+    setLoading(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/stores/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setToast({ type: "success", text: "Store deleted 🗑️" });
+      fetchStores();
+    } catch (err) {
+      console.error("Error deleting store:", err.response?.data || err.message);
+      setToast({ type: "error", text: "Failed to delete ❌" });
+    }
+  };
 
   return (
-    <div className="reports-container shifted"> 
-      {/* shifted = jab sidebar expanded, normal = collapsed */}
-      
-      <div className="reports-header">
-        <div className="title-wrap">
-          <h1>📊 Reports</h1>
-          <p className="reports-subtitle">View & Export system reports</p>
+    <div className={`stores-page ${isSidebarOpen ? "shifted" : ""}`}>
+      <h1 className="page-title">🏬 Stores</h1>
+
+      {/* Form */}
+      <div className="card stores-form-card">
+        <h2>Add New Store</h2>
+        <form onSubmit={handleSubmit} className="stores-form">
+          <div>
+            <label>Store Name</label>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Location</label>
+            <input
+              value={form.location}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Capacity (kg)</label>
+            <input
+              type="number"
+              value={form.capacityKg}
+              onChange={(e) => setForm({ ...form, capacityKg: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label>Supported Food Types</label>
+            <input
+              value={form.supportedFoodTypes}
+              onChange={(e) =>
+                setForm({ ...form, supportedFoodTypes: e.target.value })
+              }
+              placeholder="e.g. Rice, Wheat"
+              required
+            />
+          </div>
+          <div className="full-width">
+            <button type="submit" disabled={loading} className="btn-primary">
+              {loading ? "Saving..." : "➕ Add Store"}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Table */}
+      <div className="card stores-table-card">
+        <h2>All Stores</h2>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Capacity</th>
+                <th>Food Types</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stores.map((s) => (
+                <tr key={s._id}>
+                  <td>{s.name}</td>
+                  <td>{s.location}</td>
+                  <td>{s.capacityKg} kg</td>
+                  <td>{s.supportedFoodTypes.join(", ")}</td>
+                  <td>
+                    <button
+                      className="btn-danger"
+                      onClick={() => handleDelete(s._id)}
+                    >
+                      🗑 Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {!stores.length && (
+                <tr>
+                  <td colSpan={5}>No stores added yet.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className="btn-group">
-        <button className="btn" onClick={fetchDonors}>Donors Report</button>
-        <button className="btn" onClick={fetchBeneficiaries}>Beneficiaries Report</button>
-        <button className="btn" onClick={fetchStores}>Stores Report</button>
-        <button className="btn secondary" onClick={handlePrint}>Print / Export PDF</button>
-      </div>
-
-      {/* Report Container */}
-      <div id="report-sheet" className="report-card">
-        {!active && <p className="text-muted">Select any report to view…</p>}
-
-        {/* Donors */}
-        {active === "donors" && (
-          <>
-            <h2 className="section-title">Donors Report</h2>
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Food</th>
-                  <th>Qty (kg)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {donors.map((d) => (
-                  <tr key={d._id}>
-                    <td>{d.name}</td>
-                    <td>{d.foodType}</td>
-                    <td>{d.quantity}</td>
-                  </tr>
-                ))}
-                {!donors.length && (
-                  <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </>
-        )}
-
-        {/* Beneficiaries */}
-        {active === "beneficiaries" && (
-          <>
-            <h2 className="section-title">Beneficiaries Report</h2>
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Contact</th>
-                </tr>
-              </thead>
-              <tbody>
-                {beneficiaries.map((b) => (
-                  <tr key={b._id}>
-                    <td>{b.name}</td>
-                    <td>{b.type}</td>
-                    <td>{b.contact}</td>
-                  </tr>
-                ))}
-                {!beneficiaries.length && (
-                  <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </>
-        )}
-
-        {/* Stores */}
-        {active === "stores" && (
-          <>
-            <h2 className="section-title">Stores Report</h2>
-            <table className="styled-table">
-              <thead>
-                <tr>
-                  <th>Store</th>
-                  <th>Location</th>
-                  <th>Capacity (kg)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stores.map((s) => (
-                  <tr key={s._id}>
-                    <td>{s.name}</td>
-                    <td>{s.location}</td>
-                    <td>{s.capacityKg}</td>
-                  </tr>
-                ))}
-                {!stores.length && (
-                  <tr>
-                    <td colSpan={3} className="text-muted center">No data</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-
-            <h3 className="section-subtitle">Summary by Food Type</h3>
-            <div className="summary">
-              {Object.entries(summary).map(([type, total]) => (
-                <span key={type} className="badge">{type}: {total}kg</span>
-              ))}
-              {!Object.keys(summary).length && <p className="text-muted">No summary</p>}
-            </div>
-          </>
-        )}
-      </div>
+      {/* Toast */}
+      {toast && (
+        <div className={`toast ${toast.type === "error" ? "error" : "success"}`}>
+          {toast.text}
+        </div>
+      )}
     </div>
   );
 }
-
-
