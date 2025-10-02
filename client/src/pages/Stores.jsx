@@ -164,11 +164,7 @@ export default function Stores({ isSidebarOpen }) {
       </div>
 
       {/* Toast */}
-      {toast && (
-        <div className={`toast ${toast.type === "error" ? "error" : "success"}`}>
-          {toast.text}
-        </div>
-      )}
+      
     </div>
   );
 }

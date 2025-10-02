@@ -194,12 +194,7 @@ function Beneficiaries({ isSidebarOpen }) {
         </div>
       </div>
 
-      {/* Toast */}
-      {toast && (
-        <div className={`toast ${toast.type === "error" ? "error" : "success"}`}>
-          {toast.text}
-        </div>
-      )}
+      
     </div>
   );
 }
