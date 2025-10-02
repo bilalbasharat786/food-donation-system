@@ -15,7 +15,7 @@ body {
   background: linear-gradient(180deg, #1e1e2f, #252542);
   border-right: 2px solid #00c6ff;
   overflow-x: hidden;
-  transition: width 0.4s ease-in-out;
+  transition: width 0.2s ease-in-out;
   box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4);
   z-index: 999;
 }
@@ -72,11 +72,9 @@ body {
 .sidebar ul li button:hover {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   color: #fff;
-  transform: translateX(5px);
+  transform: translateX(8px);
   box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
 }
 
-.sidebar ul li button:hover .icon {
-  transform: scale(1.2) rotate(10deg);
-}
+
 

@@ -67,7 +67,7 @@ export default function Navbar({ handleLogout, onToggle }) {
           </button>
         </li>
         <li>
-          <button onClick={handleLogout}>
+          <button onClick={() =>  navigate("/login") }>
             <FaSignOutAlt className="icon" />
             <span className="text">Logout</span>
           </button>
