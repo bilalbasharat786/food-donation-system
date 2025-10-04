@@ -2,6 +2,7 @@ import "./Login.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { FaUser, FaLock, FaCamera } from "react-icons/fa";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,33 +31,57 @@ export default function Login() {
 
   return (
     <div className="login-container font-style">
-      <div className="login-box">
-        <h1 className="login-title">Login</h1>
+      <div className="glass-box">
+        <div className="icon-circle">
+          <FaCamera className="camera-icon" />
+        </div>
+        <h2 className="login-title">Welcome Back</h2>
+        <p className="login-subtitle">Please login to continue</p>
+
         {error && <p className="error-message">{error}</p>}
+
         <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="email"
-            className="input-field"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            className="input-field"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-group">
+            <FaUser className="input-icon" />
+            <input
+              type="email"
+              className="input-field"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="input-group">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              className="input-field"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="options-row">
+            <label className="remember-me">
+              <input type="checkbox" /> Remember me
+            </label>
+            <Link to="#" className="forgot-password">
+              Forgot Password?
+            </Link>
+          </div>
+
           <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Logging in..." : "LOGIN"}
           </button>
         </form>
-        <p className="register-link">
+
+        <p className="register-text">
           Don’t have an account?{" "}
-          <Link to="/register" className="register-btn">
+          <Link to="/register" className="register-link">
             Register
           </Link>
         </p>
@@ -64,3 +89,4 @@ export default function Login() {
     </div>
   );
 }
+

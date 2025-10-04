@@ -1,170 +1,154 @@
-/* Import modern font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* ===== Font Import ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-/* Apply font globally */
-.font-style, .register-container, .register-box, .register-title, 
-.register-form, .register-form input, .register-form button, 
-.login-link, .login-link a {
-  font-family: 'Poppins', sans-serif;
+.font-style {
+  font-family: "Poppins", sans-serif;
 }
 
-/* Animated Background */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
+/* ===== Container ===== */
 .register-container {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff6a00, #ee0979);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-}
-
-/* Box Animation */
-@keyframes fadeSlide {
-  from { opacity: 0; transform: translateY(-50px) scale(0.9); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.register-box {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 45px 35px;
-  border-radius: 18px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
-  width: 380px;
-  text-align: center;
-  animation: fadeSlide 1s ease forwards;
-  transition: transform 0.3s ease;
-}
-
-.register-box:hover {
-  transform: scale(1.03);
-}
-
-/* Title */
-.register-title {
-  font-size: 34px;
-  margin-bottom: 28px;
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Error */
-.error-message {
-  color: #ff4d4d;
-  margin-bottom: 15px;
-  font-size: 14px;
-  font-weight: 600;
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0% { transform: translateX(-5px); }
-  25% { transform: translateX(5px); }
-  50% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-  100% { transform: translateX(0); }
-}
-
-/* Inputs */
-.input-field {
-  width: 100%;
-  padding: 14px 16px;
-  margin: 12px 0;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  outline: none;
-  background: rgba(255, 255, 255, 0.85);
-  transition: all 0.4s ease;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-}
-
-.input-field:focus {
-  background: #fff;
-  box-shadow: 0 0 12px #2575fc, 0 0 6px #6a11cb inset;
-  transform: scale(1.05);
-}
-
-/* Register Button */
-.register-btn {
-  width: 100%;
-  padding: 14px;
-  margin-top: 18px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ff512f, #dd2476);
-  color: white;
-  font-size: 17px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  position: relative;
+  background: radial-gradient(circle at top left, #001f3f, #00132b, #000a1a);
   overflow: hidden;
 }
 
-/* Button Ripple Shine */
-.register-btn::after {
+/* ===== Glass Box ===== */
+.glass-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 50px 45px;
+  width: 360px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0, 132, 255, 0.1);
+  overflow: hidden;
+}
+
+/* ===== Border Animations (2 glowing blue lines) ===== */
+.border-animation,
+.border-animation.reverse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow: 0 0 25px rgba(0, 132, 255, 0.3);
+}
+
+.border-animation::before,
+.border-animation.reverse::before {
   content: "";
   position: absolute;
-  width: 120%;
-  height: 120%;
-  top: -10%;
-  left: -110%;
-  background: rgba(255, 255, 255, 0.25);
-  transform: rotate(25deg);
-  transition: 0.5s;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00aaff, transparent);
+  animation: moveBorder 3s linear infinite;
+  opacity: 0.9;
 }
 
-.register-btn:hover::after {
-  left: 110%;
+.border-animation.reverse::before {
+  top: auto;
+  bottom: 0;
+  left: 100%;
+  animation: moveBorderReverse 3s linear infinite;
+  opacity: 0.9;
 }
 
-.register-btn:hover:not(:disabled) {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px rgba(221, 36, 118, 0.7);
+@keyframes moveBorder {
+  0% { left: -50%; }
+  100% { left: 100%; }
 }
 
-.register-btn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
+@keyframes moveBorderReverse {
+  0% { left: 100%; }
+  100% { left: -50%; }
 }
 
-/* Login link */
-.login-link {
-  margin-top: 20px;
+/* ===== Title ===== */
+.register-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #00aaff;
+  letter-spacing: 1px;
+}
+
+/* ===== Input Fields ===== */
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
   font-size: 15px;
-  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-field:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 8px rgba(0, 153, 255, 0.6);
+  transform: scale(1.02);
+}
+
+/* ===== Register Button ===== */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 18px;
+  background: linear-gradient(90deg, #0099ff, #0055ff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 12px rgba(0, 132, 255, 0.4);
+}
+
+.register-btn:hover {
+  background: linear-gradient(90deg, #00ccff, #0066ff);
+  box-shadow: 0 0 18px rgba(0, 153, 255, 0.6);
+  transform: scale(1.04);
+}
+
+/* ===== Error Message ===== */
+.error-message {
+  color: #ff7070;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* ===== Login Link ===== */
+.login-link {
+  margin-top: 25px;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .login-btn-link {
-  color: #00ffcc;
+  color: #00aaff;
   text-decoration: none;
   font-weight: 600;
-  position: relative;
-  transition: 0.3s;
 }
 
-.login-btn-link::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  left: 0;
-  bottom: -3px;
-  background: #00ffcc;
-  transition: width 0.3s;
+.login-btn-link:hover {
+  text-decoration: underline;
 }
 
-.login-btn-link:hover::after {
-  width: 100%;
-}
+

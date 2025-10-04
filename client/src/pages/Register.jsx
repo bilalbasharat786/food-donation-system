@@ -30,9 +30,13 @@ export default function Register() {
 
   return (
     <div className="register-container font-style">
-      <div className="register-box">
-        <h1 className="register-title">Register</h1>
+      <div className="glass-box">
+        <div className="border-animation"></div>
+        <div className="border-animation reverse"></div>
+
+        <h1 className="register-title">Create Account</h1>
         {error && <p className="error-message">{error}</p>}
+
         <form onSubmit={handleRegister} className="register-form">
           <input
             type="text"
@@ -62,6 +66,7 @@ export default function Register() {
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
+
         <p className="login-link">
           Already have an account?{" "}
           <Link to="/" className="login-btn-link">
@@ -72,5 +77,7 @@ export default function Register() {
     </div>
   );
 }
+
+
 
 
