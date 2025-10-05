@@ -2,7 +2,7 @@ import "./Login.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { FaUser, FaLock, FaCamera } from "react-icons/fa";
+import { FaCamera } from "react-icons/fa";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -42,7 +42,7 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="login-form">
           <div className="input-group">
-            <FaUser className="input-icon" />
+            {/* <FaUser className="input-icon" /> */}
             <input
               type="email"
               className="input-field"
@@ -54,7 +54,7 @@ export default function Login() {
           </div>
 
           <div className="input-group">
-            <FaLock className="input-icon" />
+            {/* <FaLock className="input-icon" /> */}
             <input
               type="password"
               className="input-field"

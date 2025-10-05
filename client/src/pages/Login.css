@@ -6,7 +6,7 @@ body, html {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: radial-gradient(circle at top left, #041b35, #010a17);
-  color: #fff;
+  /* color: #fff; */
 }
 
 /* Font Class */
@@ -194,7 +194,7 @@ body, html {
   border: none;
   outline: none;
   background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  /* color: #fff; */
   font-size: 14px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
