@@ -21,7 +21,7 @@ function Beneficiaries({ isSidebarOpen }) {
   // ---------------- Fetch Beneficiaries ----------------
   const fetchBeneficiaries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/beneficiaries", {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/beneficiaries`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBeneficiaries(res.data);
@@ -39,7 +39,7 @@ function Beneficiaries({ isSidebarOpen }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/beneficiaries", form, {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/beneficiaries`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +63,7 @@ function Beneficiaries({ isSidebarOpen }) {
   // ---------------- Delete Beneficiary ----------------
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/beneficiaries/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/beneficiaries/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setToast({ type: "success", text: "Beneficiary deleted 🗑️" });

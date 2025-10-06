@@ -18,7 +18,7 @@ export default function Dashboard({ isSidebarOpen }) {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const res = await axios.get("http://localhost:5000/api/stats", {
+      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/stats`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(res.data);

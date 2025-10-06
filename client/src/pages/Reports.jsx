@@ -13,7 +13,7 @@ export default function Reports({ isSidebarOpen }) {
   const token = localStorage.getItem("token");
 
   const fetchDonors = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports/donors", {
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/donors`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setDonors(res.data);
@@ -22,7 +22,7 @@ export default function Reports({ isSidebarOpen }) {
 
   const fetchBeneficiaries = async () => {
     const res = await axios.get(
-      "http://localhost:5000/api/reports/beneficiaries",
+      `${import.meta.env.VITE_API_BASE_URL}/api/reports/beneficiaries`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -32,7 +32,7 @@ export default function Reports({ isSidebarOpen }) {
   };
 
   const fetchStores = async () => {
-    const res = await axios.get("http://localhost:5000/api/reports/stores", {
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/reports/stores`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setStores(res.data.stores);

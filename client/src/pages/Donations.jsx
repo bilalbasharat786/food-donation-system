@@ -19,13 +19,13 @@ export default function Donations({ isSidebarOpen }) {
 
   const fetchData = async () => {
     try {
-      const donorsRes = await axios.get("http://localhost:5000/api/donors", {
+      const donorsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/donors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const storesRes = await axios.get("http://localhost:5000/api/stores", {
+      const storesRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/stores`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const donationsRes = await axios.get("http://localhost:5000/api/donations", {
+      const donationsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/donations`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -46,7 +46,7 @@ export default function Donations({ isSidebarOpen }) {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:5000/api/donations",
+        `${import.meta.env.VITE_API_BASE_URL}/api/donations`,
         {
           donorId: form.donorId,
           storeId: form.storeId,
