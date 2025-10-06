@@ -11,8 +11,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 // Saare routes import kiye — alag-alag functionality ke liye
-import authRoutes from "./routes/Auth.js";               // login/register
-import donorRoutes from "./routes/Donor.js";             // donors CRUD
+import authRoutes from "./routes/auth.js";               // login/register
+import donorRoutes from "./routes/donor.js";             // donors CRUD
 import beneficiaryRoutes from "./routes/beneficiary.js"; // beneficiaries CRUD
 import storeRoutes from "./routes/store.js";             // stores CRUD
 import reportRoutes from "./routes/reports.js";          // reports module
