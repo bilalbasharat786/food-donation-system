@@ -1,88 +1,58 @@
-// express import — server banane ke liye use hota hai
+// ---------------- IMPORTS ----------------
 import express from "express";
-
-// mongoose import — MongoDB ke saath connect karne ke liye
 import mongoose from "mongoose";
-
-// cors import — frontend aur backend ke beech communication allow karne ke liye
 import cors from "cors";
-
-// dotenv import — .env file se environment variables (jaise DB URI, JWT secret) load karne ke liye
 import dotenv from "dotenv";
 
-// Saare routes import kiye — alag-alag functionality ke liye
-import authRoutes from "./routes/auth.js";               // login/register
-import donorRoutes from "./routes/donor.js";             // donors CRUD
-import beneficiaryRoutes from "./routes/beneficiary.js"; // beneficiaries CRUD
-import storeRoutes from "./routes/store.js";             // stores CRUD
-import reportRoutes from "./routes/reports.js";          // reports module
-import donationRoutes from "./routes/donation.js";       // donations
-import distributionRoutes from "./routes/distribution.js"; // distributions
-import statsRoutes from "./routes/stats.js";          // stats module
-
+// Routes import
+import authRoutes from "./routes/auth.js";
+import donorRoutes from "./routes/donor.js";
+import beneficiaryRoutes from "./routes/beneficiary.js";
+import storeRoutes from "./routes/store.js";
+import reportRoutes from "./routes/reports.js";
+import donationRoutes from "./routes/donation.js";
+import distributionRoutes from "./routes/distribution.js";
+import statsRoutes from "./routes/stats.js";
 
 // ---------------- APP CREATION ----------------
-
-// dotenv config call — env variables load ho gaye
 dotenv.config();
-
-// express app banaya
 const app = express();
 
-
 // ---------------- MIDDLEWARES ----------------
-
-// cors enable kiya — taki frontend (React) easily backend ke saath connect ho
-app.use(cors());
-
-// JSON parser — request body ko JSON me parse karta hai
 app.use(express.json());
 
+// ✅ FIXED: Proper CORS setup
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // local frontend (for development)
+    "https://food-donation-system-sigma.vercel.app", // deployed frontend domain (change if yours is different)
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 
-// ---------------- ROUTES USE ----------------
-
-// auth ke saare routes "/api/auth" pe chalein
+// ---------------- ROUTES ----------------
 app.use("/api/auth", authRoutes);
-
-// donors ke routes "/api/donors"
 app.use("/api/donors", donorRoutes);
-
-// beneficiaries ke routes "/api/beneficiaries"
 app.use("/api/beneficiaries", beneficiaryRoutes);
-
-// stores ke routes "/api/stores"
 app.use("/api/stores", storeRoutes);
-
-// reports ke routes "/api/reports"
 app.use("/api/reports", reportRoutes);
-
-// donations ke routes "/api/donations"
 app.use("/api/donations", donationRoutes);
-
-// distributions ke routes "/api/distributions"
 app.use("/api/distributions", distributionRoutes);
-
-// stats ke routes "/api/stats"
 app.use("/api/stats", statsRoutes);
 
-
 // ---------------- TEST ROUTE ----------------
-
-// agar koi user sirf "/" pe aaye to test message mile
 app.get("/", (req, res) => {
-  res.send("Food Donation System Backend Running...");
+  res.send("✅ Food Donation System Backend Running...");
 });
 
-
 // ---------------- DB CONNECTION + SERVER START ----------------
-
-// mongoose se MongoDB connect kiya (env file me se MONGO_URI liya)
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    // agar DB connect ho gaya to console me success message
     console.log("✅ MongoDB Connected");
 
-    // server ko port 5000 pe run karaya
-    app.listen(5000, () => console.log("🚀 Server running at 5000"));
+    // ✅ Use process.env.PORT (for Vercel) or 5000 locally
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
-  .catch(err => console.log("DB Error:", err));
+  .catch(err => console.log("❌ DB Error:", err));
