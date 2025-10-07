@@ -24,8 +24,8 @@ app.use(express.json());
 // ✅ FIXED: Proper CORS setup
 app.use(cors({
   origin: [
-    "http://localhost:5173", // local frontend (for development)
-    "https://food-donation-system-sigma.vercel.app", // deployed frontend domain (change if yours is different)
+    "http://localhost:5173",
+    "https://food-donation-system-sigma.vercel.app", 
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
