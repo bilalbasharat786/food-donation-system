@@ -17,7 +17,7 @@ export default function Donors({ isSidebarOpen }) {
   const token = localStorage.getItem("token");
 
   const fetchDonors = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/donors`, {
+    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/donors`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setDonors(res.data);
