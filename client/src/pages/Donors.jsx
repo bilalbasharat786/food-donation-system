@@ -32,7 +32,7 @@ export default function Donors({ isSidebarOpen }) {
     setLoading(true);
 
     await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/api/donors`,
+      `${import.meta.env.VITE_API_BASE_URL}api/donors`,
       { ...form, quantity: Number(form.quantity || 0) },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -44,7 +44,7 @@ export default function Donors({ isSidebarOpen }) {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/donors/${id}`, {
+    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}api/donors/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setToast({ type: "success", text: "Donor deleted 🗑️" });
