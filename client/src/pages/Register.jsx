@@ -11,15 +11,24 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // 🧩 Debugging line — check karega env variable load ho raha hai ya nahi
+  console.log("🌐 API Base URL:", import.meta.env.VITE_API_BASE_URL);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}api/auth/register`, {
+      // ✅ fix: ensure there's a slash between base URL and endpoint
+      const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+        ? import.meta.env.VITE_API_BASE_URL
+        : import.meta.env.VITE_API_BASE_URL + "/";
+
+      await axios.post(`${baseURL}api/auth/register`, {
         name,
         email,
         password,
       });
+
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed");
@@ -77,7 +86,3 @@ export default function Register() {
     </div>
   );
 }
-
-
-
-
