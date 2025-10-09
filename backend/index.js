@@ -21,16 +21,37 @@ const app = express();
 // ---------------- MIDDLEWARES ----------------
 app.use(express.json());
 
-// ✅ FIXED: Proper CORS setup
-app.use(cors({
-  origin: [
-    "http://localhost:5173", // local frontend (for development)
-    "https://food-donation-systm.netlify.app/", // deployed frontend domain (change if yours is different)
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
 
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:4000",
+  "http://localhost:3000",
+  
+  "https://food-donation-systm.netlify.app"
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    // allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+
+    // allow any Netlify deploy preview
+    if (origin.endsWith(".netlify.app")) {
+      return callback(null, true);
+    }
+
+    // allow exact matches
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // block everything else
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true
+}));
 // ---------------- ROUTES ----------------
 app.use("/api/auth", authRoutes);
 app.use("/api/donors", donorRoutes);
