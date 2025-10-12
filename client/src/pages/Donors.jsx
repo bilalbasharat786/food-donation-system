@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./Donors.css"; // 👈 apna CSS link kiya
+import "./Donors.css";
+import "../api.js"
 
 export default function Donors({ isSidebarOpen }) {
   const [donors, setDonors] = useState([]);
@@ -17,7 +18,7 @@ export default function Donors({ isSidebarOpen }) {
   const token = localStorage.getItem("token");
 
   const fetchDonors = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/donors`, {
+    const res = await api.get("api/donors", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setDonors(res.data);
