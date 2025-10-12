@@ -17,15 +17,21 @@ export default function Distributions({ isSidebarOpen }) {
 
   const token = localStorage.getItem("token");
 
+   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+  
+  // ---------------- Fetch All Data ----------------
+
   const fetchData = async () => {
     try {
-      const beneficiariesRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/beneficiaries`, {
+      const beneficiariesRes = await axios.get(`${baseURL}api/beneficiaries`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const storesRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/stores`, {
+      const storesRes = await axios.get(`${baseURL}api/stores`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const distributionsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/distributions`, {
+      const distributionsRes = await axios.get(`${baseURL}api/distributions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -46,7 +52,7 @@ export default function Distributions({ isSidebarOpen }) {
     setLoading(true);
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}api/distributions`,
+       `${baseURL}api/distributions`,
         {
           beneficiaryId: form.beneficiaryId,
           storeId: form.storeId,
