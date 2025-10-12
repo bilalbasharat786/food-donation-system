@@ -12,6 +12,7 @@ export default function Register() {
   const navigate = useNavigate();
 
 
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
