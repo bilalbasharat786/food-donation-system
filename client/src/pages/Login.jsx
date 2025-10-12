@@ -11,23 +11,29 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}api/auth/login`, {
-        email,
-        password,
-      });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  try {
+    // ✅ Ensure baseURL always ends with "/"
+    const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+      ? import.meta.env.VITE_API_BASE_URL
+      : import.meta.env.VITE_API_BASE_URL + "/";
+
+    const res = await axios.post(`${baseURL}api/auth/login`, {
+      email,
+      password,
+    });
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    navigate("/dashboard");
+  } catch (err) {
+    setError(err.response?.data?.error || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-container font-style">
