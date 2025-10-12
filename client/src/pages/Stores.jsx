@@ -15,9 +15,14 @@ export default function Stores({ isSidebarOpen }) {
 
   const token = localStorage.getItem("token");
 
+  
+   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+
   const fetchStores = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/stores`, {
+      const res = await axios.get(`${baseURL}api/stores`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStores(res.data);
@@ -43,7 +48,7 @@ export default function Stores({ isSidebarOpen }) {
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}api/stores`, formattedForm, {
+      await axios.post(`${baseURL}api/stores`, formattedForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -59,7 +64,7 @@ export default function Stores({ isSidebarOpen }) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}api/stores/${id}`, {
+      await axios.delete(`${baseURL}api/stores/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setToast({ type: "success", text: "Store deleted 🗑️" });
