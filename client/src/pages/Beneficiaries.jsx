@@ -18,15 +18,21 @@ function Beneficiaries({ isSidebarOpen }) {
 
   const token = localStorage.getItem("token");
 
+   // ✅ Fix: Ensure baseURL always ends with "/" to prevent "undefinedapi..." or double-slash issues
+  const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+
   // ---------------- Fetch Beneficiaries ----------------
   const fetchBeneficiaries = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/beneficiaries`, {
+      // ✅ fixed: use baseURL instead of repeating import.meta.env
+      const res = await axios.get(`${baseURL}api/beneficiaries`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBeneficiaries(res.data);
     } catch (err) {
-      console.error("Error fetching beneficiaries:", err.response?.data || err.message);
+      console.error("❌ Error fetching beneficiaries:", err.response?.data || err.message);
     }
   };
 
@@ -39,7 +45,7 @@ function Beneficiaries({ isSidebarOpen }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}api/beneficiaries`, form, {
+      await axios.post(`${baseURL}api/beneficiaries`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -63,7 +69,7 @@ function Beneficiaries({ isSidebarOpen }) {
   // ---------------- Delete Beneficiary ----------------
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}api/beneficiaries/${id}`, {
+      await axios.delete(`${baseURL}api/beneficiaries/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setToast({ type: "success", text: "Beneficiary deleted 🗑️" });
