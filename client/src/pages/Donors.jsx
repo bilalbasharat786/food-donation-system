@@ -16,11 +16,20 @@ export default function Donors({ isSidebarOpen }) {
 
   const token = localStorage.getItem("token");
 
-  const fetchDonors = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/donors`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setDonors(res.data);
+   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+
+ const fetchDonors = async () => {
+    try {
+      // ✅ fixed: added baseURL variable
+      const res = await axios.get(`${baseURL}api/donors`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+     setDonors(res.data);
+    } catch (err) {
+      console.error("❌ Fetch donors error:", err);
+    }
   };
 
   useEffect(() => {
@@ -32,7 +41,7 @@ export default function Donors({ isSidebarOpen }) {
     setLoading(true);
 
     await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}api/donors`,
+      `${baseURL}api/donors`,
       { ...form, quantity: Number(form.quantity || 0) },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -44,7 +53,7 @@ export default function Donors({ isSidebarOpen }) {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`${import.meta.env.VITE_API_BASE_URL}api/donors/${id}`, {
+    await axios.delete(`${baseURL}api/donors/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setToast({ type: "success", text: "Donor deleted 🗑️" });
