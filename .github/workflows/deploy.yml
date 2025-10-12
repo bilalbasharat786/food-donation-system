@@ -25,7 +25,7 @@ jobs:
         run: npm run build
         working-directory: ./client
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}   # backend ka URL yaha set karna hoga
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}   # backend URL injected here
 
       - name: Deploy to Netlify (Client)
         uses: nwtgck/actions-netlify@v2
@@ -52,3 +52,4 @@ jobs:
         with:
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
           apiKey: ${{ secrets.RENDER_API_KEY }}
+
