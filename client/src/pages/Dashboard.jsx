@@ -16,12 +16,22 @@ export default function Dashboard({ isSidebarOpen }) {
     distributions: 0
   });
 
+  // ✅ Safe Base URL fix — ensures it always ends with a slash "/"
+  const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+
   useEffect(() => {
     const fetchStats = async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/stats`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setStats(res.data);
+      try {
+        // ✅ updated to use baseURL
+        const res = await axios.get(`${baseURL}api/stats`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setStats(res.data);
+      } catch (err) {
+        console.error("Error fetching stats:", err.response?.data || err.message);
+      }
     };
     fetchStats();
   }, []);
@@ -93,8 +103,9 @@ export default function Dashboard({ isSidebarOpen }) {
         </div>
       </div>
 
-      <div className="dash-footer">You're running the themed dashboard — neat & shiny ✨</div>
+      <div className="dash-footer">
+        You're running the themed dashboard — neat & shiny ✨
+      </div>
     </div>
   );
 }
-
