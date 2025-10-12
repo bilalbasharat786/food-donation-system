@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
+import api from "../api"; 
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,14 +17,13 @@ export default function Login() {
   setLoading(true);
   try {
     // ✅ Ensure baseURL always ends with "/"
-    const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
-      ? import.meta.env.VITE_API_BASE_URL
-      : import.meta.env.VITE_API_BASE_URL + "/";
+     // adjust path if needed
 
-    const res = await axios.post(`${baseURL}api/auth/login`, {
-      email,
-      password,
-    });
+const res = await api.post("api/auth/login", {
+  email,
+  password,
+});
+
 
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("user", JSON.stringify(res.data.user));
