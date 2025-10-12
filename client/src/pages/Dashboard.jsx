@@ -103,9 +103,7 @@ export default function Dashboard({ isSidebarOpen }) {
         </div>
       </div>
 
-      <div className="dash-footer">
-        You're running the themed dashboard — neat & shiny ✨
-      </div>
+     
     </div>
   );
 }
