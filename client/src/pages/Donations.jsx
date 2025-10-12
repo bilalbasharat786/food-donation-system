@@ -17,15 +17,20 @@ export default function Donations({ isSidebarOpen }) {
 
   const token = localStorage.getItem("token");
 
+     const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+    ? import.meta.env.VITE_API_BASE_URL
+    : import.meta.env.VITE_API_BASE_URL + "/";
+
+    
   const fetchData = async () => {
     try {
-      const donorsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/donors`, {
+      const donorsRes = await axios.get(`${baseURL}api/donors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const storesRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/stores`, {
+      const storesRes = await axios.get(`${baseURL}api/stores`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const donationsRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}api/donations`, {
+      const donationsRes = await axios.get(`${baseURL}api/donations`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -46,7 +51,7 @@ export default function Donations({ isSidebarOpen }) {
     setLoading(true);
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}api/donations`,
+        `${baseURL}api/donations`,
         {
           donorId: form.donorId,
           storeId: form.storeId,
