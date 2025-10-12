@@ -11,8 +11,6 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // 🧩 Debugging line — check karega env variable load ho raha hai ya nahi
-  console.log("🌐 API Base URL:", import.meta.env.VITE_API_BASE_URL);
 
   const handleRegister = async (e) => {
     e.preventDefault();
