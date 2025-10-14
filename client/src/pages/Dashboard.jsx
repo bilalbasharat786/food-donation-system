@@ -80,7 +80,6 @@ export default function Dashboard({ isSidebarOpen }) {
           previous: Math.max(0, total - Math.floor(Math.random() * 5)), // fake previous for comparison
         };
       });
-console.log("📊 Chart Data:", hours);
 
       setChartData(hours);
     } catch (err) {
