@@ -61,36 +61,40 @@ router.get("/stats", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // ✅ Aggregate donations by day (last 7 entries)
+    // ✅ Get last 7 days' donation data (based on createdAt)
     const data = await Donation.aggregate([
       {
         $match: { userId: new mongoose.Types.ObjectId(userId) },
       },
-      {
-        $unwind: "$items", // ✅ important: split items array
-      },
+      { $unwind: "$items" },
       {
         $group: {
           _id: {
-            year: { $year: "$createdAt" }, // use createdAt for accurate timestamp
+            year: { $year: "$createdAt" },
             month: { $month: "$createdAt" },
             day: { $dayOfMonth: "$createdAt" },
           },
-          totalKg: { $sum: "$items.qtyKg" }, // sum of all qtyKg per day
+          totalKg: { $sum: "$items.qtyKg" },
         },
       },
-      { $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 } },
+      {
+        $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 },
+      },
       { $limit: 7 },
     ]);
 
-    // ✅ Format response for frontend chart
+    // ✅ Format for frontend (e.g. Mon, Tue, etc.)
     const formatted = data
-    
-      .map((d) => ({
-        date: `${d._id.day}/${d._id.month}`,
-        totalKg: d.totalKg,
-      }))
-      .reverse(); // reverse so days are in correct order
+      .filter((d) => d._id && d._id.day && d._id.month)
+      .map((d) => {
+        const dateObj = new Date(d._id.year, d._id.month - 1, d._id.day);
+        const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" }); // e.g. Mon
+        return {
+          date: dayName,
+          totalKg: d.totalKg,
+        };
+      })
+      .reverse();
 
     res.json(formatted);
   } catch (err) {
@@ -98,6 +102,7 @@ router.get("/stats", authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 export default router;
 

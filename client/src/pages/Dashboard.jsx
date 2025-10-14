@@ -55,11 +55,11 @@ export default function Dashboard({ isSidebarOpen }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // backend se data format: [{ date: "10/10", totalKg: 45 }]
-        const formatted = res.data.map((item) => ({
-          day: item.date,
-          current: item.totalKg,
-          previous: 0, // future use (comparison)
+        // ✅ Backend se ab format aayega: [{ date: "Mon", totalKg: 45 }]
+        const formatted = res.data.map((item, index) => ({
+          day: item.date || `Day ${index + 1}`,
+          current: item.totalKg || 0,
+          previous: 0, // future comparison
         }));
 
         setChartData(formatted);
@@ -170,10 +170,14 @@ export default function Dashboard({ isSidebarOpen }) {
                 backgroundColor: "rgba(20,20,40,0.9)",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: "10px",
+                color: "#fff",
               }}
-              labelStyle={{ color: "var(--text-light)" }}
+              labelStyle={{ color: "#fff" }}
+              itemStyle={{ color: "#00c6ff" }}
+              animationDuration={250}
             />
 
+            {/* Previous Week (pink) */}
             <Area
               type="monotone"
               dataKey="previous"
@@ -181,7 +185,12 @@ export default function Dashboard({ isSidebarOpen }) {
               fillOpacity={1}
               fill="url(#colorPrevious)"
               strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 6 }}
+              animationDuration={400}
             />
+
+            {/* Current Week (blue) */}
             <Area
               type="monotone"
               dataKey="current"
@@ -189,6 +198,9 @@ export default function Dashboard({ isSidebarOpen }) {
               fillOpacity={1}
               fill="url(#colorCurrent)"
               strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 6 }}
+              animationDuration={400}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -196,5 +208,6 @@ export default function Dashboard({ isSidebarOpen }) {
     </div>
   );
 }
+
 
 
