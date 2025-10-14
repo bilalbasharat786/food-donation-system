@@ -55,12 +55,13 @@ export default function Dashboard({ isSidebarOpen }) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // ✅ Backend se ab format aayega: [{ date: "Mon", totalKg: 45 }]
-        const formatted = res.data.map((item, index) => ({
-          day: item.date || `Day ${index + 1}`,
-          current: item.totalKg || 0,
-          previous: 0, // future comparison
-        }));
+        // ✅ Ab sirf aaj ka data aayega
+const today = res.data[0] || { date: "Today", totalKg: 0 };
+const formatted = [
+  { day: today.date, current: today.totalKg, previous: 0 },
+];
+
+setChartData(formatted);
 
         setChartData(formatted);
       } catch (err) {

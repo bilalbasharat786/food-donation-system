@@ -56,49 +56,43 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ---------------- 📊 GET DONATION STATS FOR GRAPH ----------------
+// ---------------- 📊 GET TODAY'S DONATION STATS ----------------
 router.get("/stats", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // ✅ Get last 7 days' donation data (based on createdAt)
-    const data = await Donation.aggregate([
-      {
-        $match: { userId: new mongoose.Types.ObjectId(userId) },
-      },
-      { $unwind: "$items" },
-      {
-        $group: {
-          _id: {
-            year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
-            day: { $dayOfMonth: "$createdAt" },
-          },
-          totalKg: { $sum: "$items.qtyKg" },
-        },
-      },
-      {
-        $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 },
-      },
-      { $limit: 7 },
-    ]);
+    // aaj ki date ke start & end nikal lo
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
 
-    // ✅ Format for frontend (e.g. Mon, Tue, etc.)
-    const formatted = data
-      .filter((d) => d._id && d._id.day && d._id.month)
-      .map((d) => {
-        const dateObj = new Date(d._id.year, d._id.month - 1, d._id.day);
-        const dayName = dateObj.toLocaleDateString("en-US", { weekday: "short" }); // e.g. Mon
-        return {
-          date: dayName,
-          totalKg: d.totalKg,
-        };
-      })
-      .reverse();
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
 
-    res.json(formatted);
+    // aaj ke din ke donations lo
+    const todayDonations = await Donation.find({
+      userId,
+      date: { $gte: startOfDay, $lte: endOfDay },
+    });
+
+    // total quantity sum karo
+    let totalKg = 0;
+    todayDonations.forEach((don) => {
+      don.items.forEach((i) => {
+        totalKg += i.qtyKg;
+      });
+    });
+
+    // frontend ke liye ek simple array bhejo (chart ke format me)
+    const response = [
+      {
+        date: new Date().toLocaleDateString("en-GB"), // e.g. 14/10/2025
+        totalKg,
+      },
+    ];
+
+    res.json(response);
   } catch (err) {
-    console.error("Error in /api/donations/stats:", err);
+    console.error("Error fetching today's stats:", err);
     res.status(500).json({ error: err.message });
   }
 });
