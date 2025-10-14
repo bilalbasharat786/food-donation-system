@@ -8,6 +8,7 @@ import authMiddleware from "../middleware/auth.js";
 
 const router = express.Router();
 
+// ---------------- TOTAL COUNTS STATS ----------------
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -23,7 +24,7 @@ router.get("/", authMiddleware, async (req, res) => {
       beneficiaries: beneficiariesCount,
       stores: storesCount,
       donations: donationsCount,
-      distributions: distributionsCount
+      distributions: distributionsCount,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -31,3 +32,4 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 export default router;
+

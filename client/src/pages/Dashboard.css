@@ -229,3 +229,56 @@
 .dashboard-container.shifted {
   margin-left: 220px; /* full sidebar width */
 }
+/* ===== Chart Section ===== */
+.chart-section {
+  background: var(--card-bg, #101225);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.chart-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-light, #fff);
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Recharts area chart tweaks ===== */
+.recharts-wrapper {
+  background: linear-gradient(145deg, #0b0e22, #141833);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.recharts-xAxis text,
+.recharts-yAxis text {
+  fill: #b0b3c1;
+  font-size: 12px;
+}
+
+.recharts-tooltip-wrapper {
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .chart-section {
+    padding: 16px;
+  }
+  .chart-title {
+    font-size: 1.1rem;
+  }
+}
