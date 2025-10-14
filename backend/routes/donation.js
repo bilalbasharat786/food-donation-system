@@ -85,7 +85,7 @@ router.get("/stats", authMiddleware, async (req, res) => {
 
     // ✅ Format response for frontend chart
     const formatted = data
-    .filter((d) => d._id && d._id.day && d._id.month)
+    
       .map((d) => ({
         date: `${d._id.day}/${d._id.month}`,
         totalKg: d.totalKg,
