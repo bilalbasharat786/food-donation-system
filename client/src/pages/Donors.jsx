@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./Donors.css"; // 👈 apna CSS link kiya
+import "./Donors.css";
 
 export default function Donors({ isSidebarOpen }) {
   const [donors, setDonors] = useState([]);
@@ -13,20 +13,21 @@ export default function Donors({ isSidebarOpen }) {
   });
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const token = localStorage.getItem("token");
 
-   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+  const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
     ? import.meta.env.VITE_API_BASE_URL
     : import.meta.env.VITE_API_BASE_URL + "/";
 
- const fetchDonors = async () => {
+  const fetchDonors = async () => {
     try {
-      // ✅ fixed: added baseURL variable
       const res = await axios.get(`${baseURL}api/donors`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-     setDonors(res.data);
+      setDonors(res.data);
     } catch (err) {
       console.error("❌ Fetch donors error:", err);
     }
@@ -60,106 +61,171 @@ export default function Donors({ isSidebarOpen }) {
     fetchDonors();
   };
 
+  // ✅ Filter donors as you type
+  const filteredDonors = donors.filter((d) =>
+    d.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className={`donors-page ${isSidebarOpen ? "shifted" : ""}`}>
-      <h1 className="page-title">🌟 Donors</h1>
+      {/* ===== Header + Search ===== */}
+      <div className="donor-header">
+        <h1 className="page-title">🌟 Donors</h1>
 
-      {/* Form */}
-      <div className="card donor-form-card">
-        <h2>Add New Donor</h2>
-        <form onSubmit={handleSubmit} className="donor-form">
-          <div>
-            <label>Name</label>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Contact</label>
-            <input
-              value={form.contact}
-              onChange={(e) => setForm({ ...form, contact: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Address</label>
-            <input
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-            />
-          </div>
-          <div>
-            <label>Food Type</label>
-            <input
-              value={form.foodType}
-              onChange={(e) => setForm({ ...form, foodType: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Quantity (kg)</label>
-            <input
-              type="number"
-              value={form.quantity}
-              onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-              required
-            />
-          </div>
-          <div className="full-width">
-            <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? "Saving..." : "➕ Add Donor"}
-            </button>
-          </div>
-        </form>
+        <input
+          type="text"
+          className="donor-search"
+          placeholder="Search donors..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
       </div>
 
-      {/* Table */}
-      <div className="card donor-table-card">
-        <h2>All Donors</h2>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Food</th>
-                <th>Qty</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {donors.map((d) => (
-                <tr key={d._id}>
-                  <td>{d.name}</td>
-                  <td>{d.contact}</td>
-                  <td>{d.foodType}</td>
-                  <td>{d.quantity}</td>
-                  <td>
-                    <button
-                      className="btn-danger"
-                      onClick={() => handleDelete(d._id)}
-                    >
-                      🗑 Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {!donors.length && (
+      {/* ===== Show only search results when searching ===== */}
+      {search ? (
+        <div className="card donor-table-card focus-mode">
+          <h2>Search Results</h2>
+          <div className="table-container">
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan={5}>No donors yet.</td>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Food</th>
+                  <th>Qty</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredDonors.length > 0 ? (
+                  filteredDonors.map((d) => (
+                    <tr key={d._id}>
+                      <td>{d.name}</td>
+                      <td>{d.contact}</td>
+                      <td>{d.foodType}</td>
+                      <td>{d.quantity}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4}>No donor found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* ===== Add Donor Form ===== */}
+          <div className="card donor-form-card">
+            <h2>Add New Donor</h2>
+            <form onSubmit={handleSubmit} className="donor-form">
+              <div>
+                <label>Name</label>
+                <input
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm({ ...form, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Contact</label>
+                <input
+                  value={form.contact}
+                  onChange={(e) =>
+                    setForm({ ...form, contact: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Address</label>
+                <input
+                  value={form.address}
+                  onChange={(e) =>
+                    setForm({ ...form, address: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label>Food Type</label>
+                <input
+                  value={form.foodType}
+                  onChange={(e) =>
+                    setForm({ ...form, foodType: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Quantity (kg)</label>
+                <input
+                  type="number"
+                  value={form.quantity}
+                  onChange={(e) =>
+                    setForm({ ...form, quantity: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="full-width">
+                <button type="submit" disabled={loading} className="btn-primary">
+                  {loading ? "Saving..." : "➕ Add Donor"}
+                </button>
+              </div>
+            </form>
+          </div>
 
-  
+          {/* ===== Full Donor List ===== */}
+          <div className="card donor-table-card">
+            <h2>All Donors</h2>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Food</th>
+                    <th>Qty</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {donors.map((d) => (
+                    <tr key={d._id}>
+                      <td>{d.name}</td>
+                      <td>{d.contact}</td>
+                      <td>{d.foodType}</td>
+                      <td>{d.quantity}</td>
+                      <td>
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDelete(d._id)}
+                        >
+                          🗑 Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {!donors.length && (
+                    <tr>
+                      <td colSpan={5}>No donors yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
+
+
 
 

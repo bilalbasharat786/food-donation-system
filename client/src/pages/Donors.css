@@ -219,5 +219,34 @@ table tr:hover {
   85% { opacity: 1; transform: translateY(0); }
   100% { opacity: 0; transform: translateY(20px); }
 }
+.donor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.donor-search {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+.donor-search:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 150, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.focus-mode {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 

@@ -15,10 +15,12 @@ function Beneficiaries({ isSidebarOpen }) {
 
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const token = localStorage.getItem("token");
 
-   // ✅ Fix: Ensure baseURL always ends with "/" to prevent "undefinedapi..." or double-slash issues
+  // ✅ Fix: Ensure baseURL always ends with "/" 
   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
     ? import.meta.env.VITE_API_BASE_URL
     : import.meta.env.VITE_API_BASE_URL + "/";
@@ -26,7 +28,6 @@ function Beneficiaries({ isSidebarOpen }) {
   // ---------------- Fetch Beneficiaries ----------------
   const fetchBeneficiaries = async () => {
     try {
-      // ✅ fixed: use baseURL instead of repeating import.meta.env
       const res = await axios.get(`${baseURL}api/beneficiaries`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -79,131 +80,191 @@ function Beneficiaries({ isSidebarOpen }) {
     }
   };
 
+  // ✅ Filter beneficiaries as you type
+  const filteredBeneficiaries = beneficiaries.filter((b) =>
+    b.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className={`beneficiaries-page ${isSidebarOpen ? "shifted" : ""}`}>
-      <h1 className="page-title">🤝 Beneficiaries</h1>
+      {/* ===== Header + Search ===== */}
+      <div className="beneficiary-header">
+        <h1 className="page-title">🤝 Beneficiaries</h1>
 
-      {/* Form */}
-      <div className="card beneficiary-form-card">
-        <h2>Add New Beneficiary</h2>
-        <form onSubmit={handleSubmit} className="beneficiary-form">
-          <div>
-            <label>Type</label>
-            <select
-              value={form.type}
-              onChange={(e) => setForm({ ...form, type: e.target.value })}
-            >
-              <option value="individual">Individual</option>
-              <option value="family">Family</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Name</label>
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-            />
-          </div>
-
-          <div>
-            <label>Contact</label>
-            <input
-              type="text"
-              value={form.contact}
-              onChange={(e) => setForm({ ...form, contact: e.target.value })}
-              required
-            />
-          </div>
-
-          <div>
-            <label>Address</label>
-            <input
-              type="text"
-              value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
-            />
-          </div>
-
-          {form.type === "family" && (
-            <div>
-              <label>Household Size</label>
-              <input
-                type="number"
-                value={form.householdSize}
-                onChange={(e) => setForm({ ...form, householdSize: e.target.value })}
-              />
-            </div>
-          )}
-
-          <div>
-            <label>Notes</label>
-            <input
-              type="text"
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            />
-          </div>
-
-          <div className="full-width">
-            <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? "Saving..." : "➕ Add Beneficiary"}
-            </button>
-          </div>
-        </form>
+        <input
+          type="text"
+          className="beneficiary-search"
+          placeholder="Search beneficiaries..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
       </div>
 
-      {/* Table */}
-      <div className="card beneficiary-table-card">
-        <h2>All Beneficiaries</h2>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>Household</th>
-                <th>Notes</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {beneficiaries.map((b) => (
-                <tr key={b._id}>
-                  <td>{b.name}</td>
-                  <td>{b.type}</td>
-                  <td>{b.contact}</td>
-                  <td>{b.address}</td>
-                  <td>{b.type === "family" ? b.householdSize : "-"}</td>
-                  <td>{b.notes}</td>
-                  <td>
-                    <button
-                      className="btn-danger"
-                      onClick={() => handleDelete(b._id)}
-                    >
-                      🗑 Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {!beneficiaries.length && (
+      {/* ===== Show only search results when searching ===== */}
+      {search ? (
+        <div className="card beneficiary-table-card focus-mode">
+          <h2>Search Results</h2>
+          <div className="table-container">
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan={7}>No beneficiaries yet.</td>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Contact</th>
+                  <th>Address</th>
+                  <th>Household</th>
+                  <th>Notes</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredBeneficiaries.length > 0 ? (
+                  filteredBeneficiaries.map((b) => (
+                    <tr key={b._id}>
+                      <td>{b.name}</td>
+                      <td>{b.type}</td>
+                      <td>{b.contact}</td>
+                      <td>{b.address}</td>
+                      <td>{b.type === "family" ? b.householdSize : "-"}</td>
+                      <td>{b.notes}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6}>No beneficiary found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* ===== Add Beneficiary Form ===== */}
+          <div className="card beneficiary-form-card">
+            <h2>Add New Beneficiary</h2>
+            <form onSubmit={handleSubmit} className="beneficiary-form">
+              <div>
+                <label>Type</label>
+                <select
+                  value={form.type}
+                  onChange={(e) => setForm({ ...form, type: e.target.value })}
+                >
+                  <option value="individual">Individual</option>
+                  <option value="family">Family</option>
+                </select>
+              </div>
 
-      
+              <div>
+                <label>Name</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Contact</label>
+                <input
+                  type="text"
+                  value={form.contact}
+                  onChange={(e) => setForm({ ...form, contact: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div>
+                <label>Address</label>
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={(e) => setForm({ ...form, address: e.target.value })}
+                />
+              </div>
+
+              {form.type === "family" && (
+                <div>
+                  <label>Household Size</label>
+                  <input
+                    type="number"
+                    value={form.householdSize}
+                    onChange={(e) =>
+                      setForm({ ...form, householdSize: e.target.value })
+                    }
+                  />
+                </div>
+              )}
+
+              <div>
+                <label>Notes</label>
+                <input
+                  type="text"
+                  value={form.notes}
+                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                />
+              </div>
+
+              <div className="full-width">
+                <button type="submit" disabled={loading} className="btn-primary">
+                  {loading ? "Saving..." : "➕ Add Beneficiary"}
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* ===== Full Beneficiary List ===== */}
+          <div className="card beneficiary-table-card">
+            <h2>All Beneficiaries</h2>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Household</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {beneficiaries.map((b) => (
+                    <tr key={b._id}>
+                      <td>{b.name}</td>
+                      <td>{b.type}</td>
+                      <td>{b.contact}</td>
+                      <td>{b.address}</td>
+                      <td>{b.type === "family" ? b.householdSize : "-"}</td>
+                      <td>{b.notes}</td>
+                      <td>
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDelete(b._id)}
+                        >
+                          🗑 Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {!beneficiaries.length && (
+                    <tr>
+                      <td colSpan={7}>No beneficiaries yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 export default Beneficiaries;
+
 

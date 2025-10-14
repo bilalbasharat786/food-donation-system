@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Stores.css"; // 👈 apna CSS link kiya
+import "./Stores.css"; // 👈 apna CSS link
 
 export default function Stores({ isSidebarOpen }) {
   const [stores, setStores] = useState([]);
@@ -12,11 +12,12 @@ export default function Stores({ isSidebarOpen }) {
   });
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  
-   const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
+  const baseURL = import.meta.env.VITE_API_BASE_URL.endsWith("/")
     ? import.meta.env.VITE_API_BASE_URL
     : import.meta.env.VITE_API_BASE_URL + "/";
 
@@ -75,101 +76,155 @@ export default function Stores({ isSidebarOpen }) {
     }
   };
 
+  // ✅ Filter logic
+  const filteredStores = stores.filter((s) =>
+    s.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className={`stores-page ${isSidebarOpen ? "shifted" : ""}`}>
-      <h1 className="page-title">🏬 Stores</h1>
+      {/* ===== Header + Search ===== */}
+      <div className="store-header">
+        <h1 className="page-title">🏬 Stores</h1>
 
-      {/* Form */}
-      <div className="card stores-form-card">
-        <h2>Add New Store</h2>
-        <form onSubmit={handleSubmit} className="stores-form">
-          <div>
-            <label>Store Name</label>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Location</label>
-            <input
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Capacity (kg)</label>
-            <input
-              type="number"
-              value={form.capacityKg}
-              onChange={(e) => setForm({ ...form, capacityKg: e.target.value })}
-              required
-            />
-          </div>
-          <div>
-            <label>Supported Food Types</label>
-            <input
-              value={form.supportedFoodTypes}
-              onChange={(e) =>
-                setForm({ ...form, supportedFoodTypes: e.target.value })
-              }
-              placeholder="e.g. Rice, Wheat"
-              required
-            />
-          </div>
-          <div className="full-width">
-            <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? "Saving..." : "➕ Add Store"}
-            </button>
-          </div>
-        </form>
+        <input
+          type="text"
+          className="store-search"
+          placeholder="Search stores..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
       </div>
 
-      {/* Table */}
-      <div className="card stores-table-card">
-        <h2>All Stores</h2>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Capacity</th>
-                <th>Food Types</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stores.map((s) => (
-                <tr key={s._id}>
-                  <td>{s.name}</td>
-                  <td>{s.location}</td>
-                  <td>{s.capacityKg} kg</td>
-                  <td>{s.supportedFoodTypes.join(", ")}</td>
-                  <td>
-                    <button
-                      className="btn-danger"
-                      onClick={() => handleDelete(s._id)}
-                    >
-                      🗑 Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {!stores.length && (
+      {/* ===== Show only search results when searching ===== */}
+      {search ? (
+        <div className="card stores-table-card focus-mode">
+          <h2>Search Results</h2>
+          <div className="table-container">
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan={5}>No stores added yet.</td>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Capacity</th>
+                  <th>Food Types</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredStores.length > 0 ? (
+                  filteredStores.map((s) => (
+                    <tr key={s._id}>
+                      <td>{s.name}</td>
+                      <td>{s.location}</td>
+                      <td>{s.capacityKg} kg</td>
+                      <td>{s.supportedFoodTypes.join(", ")}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4}>No store found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* ===== Form ===== */}
+          <div className="card stores-form-card">
+            <h2>Add New Store</h2>
+            <form onSubmit={handleSubmit} className="stores-form">
+              <div>
+                <label>Store Name</label>
+                <input
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label>Location</label>
+                <input
+                  value={form.location}
+                  onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label>Capacity (kg)</label>
+                <input
+                  type="number"
+                  value={form.capacityKg}
+                  onChange={(e) =>
+                    setForm({ ...form, capacityKg: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div>
+                <label>Supported Food Types</label>
+                <input
+                  value={form.supportedFoodTypes}
+                  onChange={(e) =>
+                    setForm({ ...form, supportedFoodTypes: e.target.value })
+                  }
+                  placeholder="e.g. Rice, Wheat"
+                  required
+                />
+              </div>
+              <div className="full-width">
+                <button type="submit" disabled={loading} className="btn-primary">
+                  {loading ? "Saving..." : "➕ Add Store"}
+                </button>
+              </div>
+            </form>
+          </div>
 
-      {/* Toast */}
-      
+          {/* ===== All Stores ===== */}
+          <div className="card stores-table-card">
+            <h2>All Stores</h2>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Food Types</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stores.map((s) => (
+                    <tr key={s._id}>
+                      <td>{s.name}</td>
+                      <td>{s.location}</td>
+                      <td>{s.capacityKg} kg</td>
+                      <td>{s.supportedFoodTypes.join(", ")}</td>
+                      <td>
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDelete(s._id)}
+                        >
+                          🗑 Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {!stores.length && (
+                    <tr>
+                      <td colSpan={5}>No stores added yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
