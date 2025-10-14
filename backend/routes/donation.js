@@ -55,47 +55,36 @@ router.get("/", authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// ---------------- 📊 GET TODAY'S DONATION STATS ----------------
+// ---------------- 📊 GET LAST 7 HOURS DONATION STATS ----------------
 router.get("/stats", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // aaj ki date ke start & end nikal lo
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
+    // ⏰ Last 7 hours ka range
+    const now = new Date();
+    const sevenHoursAgo = new Date(now.getTime() - 7 * 60 * 60 * 1000);
 
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
-
-    // aaj ke din ke donations lo
-    const todayDonations = await Donation.find({
+    // ✅ Donation data for last 7 hours (using createdAt)
+    const recentDonations = await Donation.find({
       userId,
-      date: { $gte: startOfDay, $lte: endOfDay },
+      createdAt: { $gte: sevenHoursAgo, $lte: now },
+    }).select("createdAt items -_id");
+
+    // 🧮 Flatten and calculate totalKg per donation
+    const formatted = recentDonations.map((don) => {
+      const totalKg = don.items.reduce((sum, i) => sum + (i.qtyKg || 0), 0);
+      return { createdAt: don.createdAt, totalKg };
     });
 
-    // total quantity sum karo
-    let totalKg = 0;
-    todayDonations.forEach((don) => {
-      don.items.forEach((i) => {
-        totalKg += i.qtyKg;
-      });
-    });
-
-    // frontend ke liye ek simple array bhejo (chart ke format me)
-    const response = [
-      {
-        date: new Date().toLocaleDateString("en-GB"), // e.g. 14/10/2025
-        totalKg,
-      },
-    ];
-
-    res.json(response);
+    res.json(formatted);
   } catch (err) {
-    console.error("Error fetching today's stats:", err);
+    console.error("Error fetching hourly stats:", err);
     res.status(500).json({ error: err.message });
   }
 });
+
+
+ 
 
 
 export default router;
