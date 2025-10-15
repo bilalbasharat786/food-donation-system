@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   // password required
   password: { type: String, required: true },
   // contact optional
-  contact: { type: String },
+  // contact: { type: String },
 });
 
 // Model export — baad me queries me use hoga (User.findOne, User.create)

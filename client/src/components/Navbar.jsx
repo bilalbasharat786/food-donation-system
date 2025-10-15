@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { FaTachometerAlt, FaUsers, FaStore, FaDonate, FaChartBar, FaHandHoldingHeart, FaSignOutAlt } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaStore, FaDonate, FaChartBar, FaHandHoldingHeart, FaSignOutAlt,FaUserCircle, } from "react-icons/fa";
 import "./Navbar.css";
 import { useState } from "react";
 
@@ -68,7 +68,7 @@ export default function Navbar({ handleLogout, onToggle }) {
         </li>
         <li>
           <button onClick={() => navigate("/profile")}>
-            <FaChartBar className="icon" />
+            <FaUserCircle className="icon" />
             <span className="text">Profile</span>
           </button>
         </li>
