@@ -34,66 +34,32 @@ export default function Dashboard({ isSidebarOpen }) {
     : import.meta.env.VITE_API_BASE_URL + "/";
 
   // ---------------- FETCH TOTAL STATS ----------------
-  useEffect(() => {
-    const fetchStats = async () => {
+ useEffect(() => {
+    const fetchGraphData = async () => {
       try {
-        const res = await axios.get(`${baseURL}api/stats`, {
+        const res = await axios.get(`${baseURL}api/donations/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setStats(res.data);
+
+        const donations = res.data || [];
+
+        // ✅ Format donation data for the chart
+        const formatted = donations.map((don, index) => {
+          const label = `Donation ${index + 1}`;
+          return {
+            hour: label,
+            current: don.totalKg,
+            previous: Math.max(0, don.totalKg - Math.floor(Math.random() * 3)), // fake previous for comparison
+          };
+        });
+
+        setChartData(formatted);
       } catch (err) {
-        console.error("❌ Error fetching stats:", err.response?.data || err.message);
+        console.error("❌ Error fetching graph data:", err.response?.data || err.message);
       }
     };
-    fetchStats();
+    fetchGraphData();
   }, []);
-
-  // ---------------- FETCH GRAPH DATA (REAL API) ----------------
-  useEffect(() => {
-  const fetchGraphData = async () => {
-    try {
-      const res = await axios.get(`${baseURL}api/donations/stats`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      // ✅ Assume backend response has timestamps or donation times
-      const donations = res.data || [];
-
-      // Abhi ke time se pichle 7 ghante nikaalte hain
-      const now = new Date();
-      const hours = Array.from({ length: 7 }).map((_, i) => {
-     // ✅ Backend se aaye hue last 7 donations data ko directly use karte hain
-const donations = res.data || [];
-
-const formatted = donations.map((don, index) => {
-  const label = `Donation ${index + 1}`; // x-axis label
-  return {
-    hour: label,
-    current: don.totalKg,
-    previous: Math.max(0, don.totalKg - Math.floor(Math.random() * 3)), // fake previous for comparison
-  };
-});
-
-setChartData(formatted);
-
-
-        // const total = hourDonations.reduce((sum, don) => sum + (don.totalKg || 0), 0);
-
-        return {
-          hour: label,
-          current: total,
-          previous: Math.max(0, total - Math.floor(Math.random() * 5)), // fake previous for comparison
-        };
-      });
-
-      setChartData(hours);
-    } catch (err) {
-      console.error("❌ Error fetching graph data:", err.response?.data || err.message);
-    }
-  };
-  fetchGraphData();
-  
-}, []);
 
 
   return (
