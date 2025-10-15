@@ -61,14 +61,12 @@ router.get("/stats", authMiddleware, async (req, res) => {
     const userId = req.user.id;
 
     // ⏰ Last 7 hours ka range
-    const now = new Date();
-    const sevenHoursAgo = new Date(now.getTime() - 7 * 60 * 60 * 1000);
+   // ✅ Last 7 latest donations (based on creation time)
+const recentDonations = await Donation.find({ userId })
+  .sort({ createdAt: -1 }) // newest first
+  .limit(7)
+  .select("createdAt items -_id");
 
-    // ✅ Donation data for last 7 hours (using createdAt)
-    const recentDonations = await Donation.find({
-      userId,
-      createdAt: { $gte: sevenHoursAgo, $lte: now },
-    }).select("createdAt items -_id");
 
     // 🧮 Flatten and calculate totalKg per donation
     const formatted = recentDonations.map((don) => {

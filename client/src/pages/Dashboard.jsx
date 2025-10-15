@@ -62,17 +62,22 @@ export default function Dashboard({ isSidebarOpen }) {
       // Abhi ke time se pichle 7 ghante nikaalte hain
       const now = new Date();
       const hours = Array.from({ length: 7 }).map((_, i) => {
-        const d = new Date(now);
-        d.setHours(now.getHours() - (6 - i)); // 7 ghante pichhe tak
-        const label = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+     // ✅ Backend se aaye hue last 7 donations data ko directly use karte hain
+const donations = res.data || [];
 
-        // Is hour ke donations nikaalo
-        const hourDonations = donations.filter((don) => {
-          const donTime = new Date(don.createdAt);
-          return donTime.getHours() === d.getHours();
-        });
+const formatted = donations.map((don, index) => {
+  const label = `Donation ${index + 1}`; // x-axis label
+  return {
+    hour: label,
+    current: don.totalKg,
+    previous: Math.max(0, don.totalKg - Math.floor(Math.random() * 3)), // fake previous for comparison
+  };
+});
 
-        const total = hourDonations.reduce((sum, don) => sum + (don.totalKg || 0), 0);
+setChartData(formatted);
+
+
+        // const total = hourDonations.reduce((sum, don) => sum + (don.totalKg || 0), 0);
 
         return {
           hour: label,
