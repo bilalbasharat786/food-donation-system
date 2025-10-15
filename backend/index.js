@@ -12,6 +12,7 @@ import reportRoutes from "./routes/reports.js";
 import donationRoutes from "./routes/donation.js";
 import distributionRoutes from "./routes/distribution.js";
 import statsRoutes from "./routes/stats.js";
+import userRoutes from "./routes/profile.js";
 
 dotenv.config();
 const app = express();
@@ -52,6 +53,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/distributions", distributionRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/profile", userRoutes);
 
 // ---------------- TEST ROUTE ----------------
 app.get("/", (req, res) => {

@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
 
   // password required
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  // contact optional
+  contact: { type: String },
 });
 
 // Model export — baad me queries me use hoga (User.findOne, User.create)

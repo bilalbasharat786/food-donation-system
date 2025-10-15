@@ -6,6 +6,7 @@ import Stores from "./pages/Stores.jsx";
 import Donations from "./pages/Donations.jsx";
 import Distributions from "./pages/Distributions.jsx";
 import Reports from "./pages/Reports.jsx";
+import Profile from "./pages/Profile.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Layout from "./components/Layout.jsx";
 
@@ -90,6 +91,16 @@ export default function App() {
           <ProtectedRoute>
             <Layout>
               <Reports />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <Profile />
             </Layout>
           </ProtectedRoute>
         }
