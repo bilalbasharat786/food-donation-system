@@ -1,65 +1,237 @@
+/* ==============================
+   GLOBAL PROFILE STYLING
+============================== */
+.profile-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #041b35, #010a17);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+.profile-container::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #0084ff;
+  filter: blur(150px);
+  opacity: 0.3;
+  top: -100px;
+  left: -100px;
+  border-radius: 50%;
+}
+
+.profile-container::after {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #0052ff;
+  filter: blur(150px);
+  opacity: 0.25;
+  bottom: -100px;
+  right: -100px;
+  border-radius: 50%;
+}
+
+/* ==============================
+   PROFILE CARD (Glass Style)
+============================== */
 .profile-card {
-  background: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  max-width: 500px;
-  margin: auto;
-}
-
-.profile-title {
-  text-align: center;
-  color: #0d3b66;
-  margin-bottom: 20px;
-}
-
-.profile-form {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  width: 400px;
+  padding: 40px 35px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 30px rgba(0, 170, 255, 0.2);
+  z-index: 2;
+  overflow: hidden;
 }
 
-.profile-form label {
-  font-weight: 500;
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 40px rgba(0, 170, 255, 0.3);
 }
 
-.profile-form input {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+/* Animated glowing border (like login) */
+.profile-card::before,
+.profile-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent, rgba(0, 200, 255, 0.9), transparent);
+  background-size: 200% 200%;
+  animation: moveBorder1 3s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  pointer-events: none;
+}
+
+.profile-card::after {
+  background: linear-gradient(270deg, transparent, rgba(0, 200, 255, 0.9), transparent);
+  animation: moveBorder2 3s linear infinite;
+}
+
+@keyframes moveBorder1 {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 150% 50%; }
+}
+
+@keyframes moveBorder2 {
+  0% { background-position: 150% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==============================
+   PROFILE TEXT & HEADINGS
+============================== */
+.profile-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Profile data (non-edit mode) */
+.profile-card p {
+  font-size: 15px;
+  margin: 8px 0;
+  color: #b8c7d9;
+}
+
+/* ==============================
+   BUTTONS
+============================== */
+.edit-btn, .save-btn, .cancel-btn {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #fff;
+  background: linear-gradient(90deg, #007bff, #00bfff);
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+}
+
+.edit-btn:hover, .save-btn:hover {
+  box-shadow: 0 0 25px rgba(0, 170, 255, 0.5);
+  transform: scale(1.03);
+}
+
+.cancel-btn {
+  background: linear-gradient(90deg, #ff4b4b, #ff7070);
+}
+
+.cancel-btn:hover {
+  box-shadow: 0 0 25px rgba(255, 100, 100, 0.5);
+  transform: scale(1.03);
 }
 
 .form-actions {
   display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
 }
 
-.save-btn {
-  background: #0d3b66;
-  color: white;
+/* ==============================
+   FORM INPUTS
+============================== */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+.profile-form label {
+  font-size: 14px;
+  color: #b8c7d9;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
   border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.cancel-btn {
-  background: #aaa;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
+.profile-form input:focus {
+  border: 1px solid #00aaff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
 }
 
+/* ==============================
+   SUCCESS & ERROR MESSAGES
+============================== */
 .success {
-  color: green;
+  background: rgba(0, 255, 100, 0.1);
+  color: #66ff99;
+  border-left: 4px solid #33cc66;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
   text-align: center;
+  margin-bottom: 10px;
+  font-size: 13px;
 }
 
 .error {
-  color: red;
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff6666;
+  border-left: 4px solid #ff4b4b;
+  padding: 10px 15px;
+  border-radius: 6px;
+  width: 100%;
   text-align: center;
+  margin-bottom: 10px;
+  font-size: 13px;
 }
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 420px) {
+  .profile-card {
+    width: 90%;
+    padding: 30px 25px;
+  }
+
+  .profile-title {
+    font-size: 22px;
+  }
+
+  .profile-form input {
+    font-size: 13px;
+  }
+}
+
 
