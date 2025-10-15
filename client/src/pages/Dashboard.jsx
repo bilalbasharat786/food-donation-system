@@ -33,6 +33,20 @@ export default function Dashboard({ isSidebarOpen }) {
     ? import.meta.env.VITE_API_BASE_URL
     : import.meta.env.VITE_API_BASE_URL + "/";
 
+
+      useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(`${baseURL}api/stats`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStats(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching stats:", err.response?.data || err.message);
+      }
+    };
+    fetchStats();
+  }, []);
   // ---------------- FETCH TOTAL STATS ----------------
  useEffect(() => {
     const fetchGraphData = async () => {
