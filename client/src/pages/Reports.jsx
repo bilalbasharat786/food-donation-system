@@ -131,19 +131,33 @@ export default function Reports({ isSidebarOpen }) {
               <div style={{ width: "100%", height: 300, marginTop: 40 }}>
                 <h3>Last 7 Donors (Quantity Trend)</h3>
                 <ResponsiveContainer>
-                  <AreaChart data={donorGraph}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="label" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      stroke="#8884d8"
-                      fill="#8884d8"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+      <AreaChart data={donorGraph}>
+        <defs>
+          <linearGradient id="colorDonor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#29239c" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#534f92" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+        <XAxis dataKey="label" stroke="#555" />
+        <YAxis stroke="#555" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 3px 8px rgba(0,0,0,0.1)",
+            border: "none",
+          }}
+        />
+        <Area
+          type="monotone"
+          dataKey="value"
+          stroke="#29239c"
+          fill="url(#colorDonor)"
+          strokeWidth={3}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
               </div>
             )}
           </>
@@ -183,20 +197,34 @@ export default function Reports({ isSidebarOpen }) {
             {beneficiaries.length > 0 && (
               <div style={{ width: "100%", height: 300, marginTop: 40 }}>
                 <h3>Last 7 Beneficiaries (Household Size Trend)</h3>
-                <ResponsiveContainer>
-                  <AreaChart data={beneGraph}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="label" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      stroke="#82ca9d"
-                      fill="#82ca9d"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+               <ResponsiveContainer>
+      <AreaChart data={donorGraph}>
+        <defs>
+          <linearGradient id="colorDonor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#29239c" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#534f92" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+        <XAxis dataKey="label" stroke="#555" />
+        <YAxis stroke="#555" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 3px 8px rgba(0,0,0,0.1)",
+            border: "none",
+          }}
+        />
+        <Area
+          type="monotone"
+          dataKey="value"
+          stroke="#29239c"
+          fill="url(#colorDonor)"
+          strokeWidth={3}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
               </div>
             )}
           </>
@@ -248,20 +276,34 @@ export default function Reports({ isSidebarOpen }) {
             {stores.length > 0 && (
               <div style={{ width: "100%", height: 300, marginTop: 40 }}>
                 <h3>Last 7 Stores (Capacity Trend)</h3>
-                <ResponsiveContainer>
-                  <AreaChart data={storeGraph}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="label" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="value"
-                      stroke="#ffc658"
-                      fill="#ffc658"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+               <ResponsiveContainer>
+      <AreaChart data={donorGraph}>
+        <defs>
+          <linearGradient id="colorDonor" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#29239c" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#534f92" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+        <XAxis dataKey="label" stroke="#555" />
+        <YAxis stroke="#555" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#fff",
+            borderRadius: "10px",
+            boxShadow: "0 3px 8px rgba(0,0,0,0.1)",
+            border: "none",
+          }}
+        />
+        <Area
+          type="monotone"
+          dataKey="value"
+          stroke="#29239c"
+          fill="url(#colorDonor)"
+          strokeWidth={3}
+        />
+      </AreaChart>
+    </ResponsiveContainer>
               </div>
             )}
           </>
