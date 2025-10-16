@@ -63,7 +63,8 @@ export default function Dashboard({ isSidebarOpen }) {
           return {
             hour: label,
             current: don.totalKg,
-            previous: Math.max(0, don.totalKg - Math.floor(Math.random() * 3)), // fake previous for comparison
+          previous: don.previousKg || 0,
+// fake previous for comparison
           };
         });
 

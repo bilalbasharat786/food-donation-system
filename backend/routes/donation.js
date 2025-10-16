@@ -68,11 +68,15 @@ const recentDonations = await Donation.find({ userId })
   .select("createdAt items -_id");
 
 
-    // 🧮 Flatten and calculate totalKg per donation
-    const formatted = recentDonations.map((don) => {
-      const totalKg = don.items.reduce((sum, i) => sum + (i.qtyKg || 0), 0);
-      return { createdAt: don.createdAt, totalKg };
-    });
+  // 🧮 Flatten and calculate totalKg per donation
+const formatted = recentDonations.map((don, index, arr) => {
+  const totalKg = don.items.reduce((sum, i) => sum + (i.qtyKg || 0), 0);
+  const previousKg = index < arr.length - 1
+    ? arr[index + 1].items.reduce((sum, i) => sum + (i.qtyKg || 0), 0)
+    : 0;
+  return { createdAt: don.createdAt, totalKg, previousKg };
+});
+
 
     res.json(formatted);
   } catch (err) {
