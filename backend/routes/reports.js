@@ -19,26 +19,30 @@ router.get("/donors", authMiddleware, async (req, res) => {
 // ✅ Donors Graph (Last 7 Donors + previous)
 router.get("/donors/graph", authMiddleware, async (req, res) => {
   try {
+    // Last 14 donors: 7 current + 7 previous
     const donors = await Donor.find({ userId: req.user.id })
       .sort({ createdAt: -1 })
-      .limit(7)
+      .limit(14)
       .select("name quantity createdAt");
 
-    const formatted = donors.reverse().map((d) => {
-      const prev = Math.max(0, d.quantity - d.quantity * (0.1 + Math.random() * 0.2)); // 10–30% less
-      return {
-        label: d.name,
-        current: d.quantity,
-        previous: Math.round(prev),
-        date: d.createdAt,
-      };
-    });
+    // Split last 7 (current) aur usse pehle 7 (previous)
+    const current = donors.slice(0, 7).reverse();
+    const previous = donors.slice(7, 14).reverse();
+
+    // Combine by index
+    const formatted = current.map((d, i) => ({
+      label: d.name,
+      current: d.quantity,
+      previous: previous[i]?.quantity || 0,
+      date: d.createdAt,
+    }));
 
     res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // ---------------- BENEFICIARIES REPORT ----------------
 router.get("/beneficiaries", authMiddleware, async (req, res) => {
@@ -55,25 +59,25 @@ router.get("/beneficiaries/graph", authMiddleware, async (req, res) => {
   try {
     const beneficiaries = await Beneficiary.find({ userId: req.user.id })
       .sort({ createdAt: -1 })
-      .limit(7)
+      .limit(14)
       .select("name householdSize createdAt");
 
-    const formatted = beneficiaries.reverse().map((b) => {
-      const val = b.householdSize || 1;
-      const prev = Math.max(0, val - val * (0.1 + Math.random() * 0.2));
-      return {
-        label: b.name,
-        current: val,
-        previous: Math.round(prev),
-        date: b.createdAt,
-      };
-    });
+    const current = beneficiaries.slice(0, 7).reverse();
+    const previous = beneficiaries.slice(7, 14).reverse();
+
+    const formatted = current.map((b, i) => ({
+      label: b.name,
+      current: b.householdSize || 1,
+      previous: previous[i]?.householdSize || 0,
+      date: b.createdAt,
+    }));
 
     res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // ---------------- STORES REPORT + SUMMARY ----------------
 router.get("/stores", authMiddleware, async (req, res) => {
@@ -99,25 +103,25 @@ router.get("/stores/graph", authMiddleware, async (req, res) => {
   try {
     const stores = await Store.find({ userId: req.user.id })
       .sort({ createdAt: -1 })
-      .limit(7)
+      .limit(14)
       .select("name capacityKg createdAt");
 
-    const formatted = stores.reverse().map((s) => {
-      const val = s.capacityKg || 0;
-      const prev = Math.max(0, val - val * (0.1 + Math.random() * 0.2));
-      return {
-        label: s.name,
-        current: val,
-        previous: Math.round(prev),
-        date: s.createdAt,
-      };
-    });
+    const current = stores.slice(0, 7).reverse();
+    const previous = stores.slice(7, 14).reverse();
+
+    const formatted = current.map((s, i) => ({
+      label: s.name,
+      current: s.capacityKg || 0,
+      previous: previous[i]?.capacityKg || 0,
+      date: s.createdAt,
+    }));
 
     res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 export default router;
 

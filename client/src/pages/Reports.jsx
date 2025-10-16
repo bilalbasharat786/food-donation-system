@@ -198,7 +198,7 @@ export default function Reports({ isSidebarOpen }) {
               <div style={{ width: "100%", height: 300, marginTop: 40 }}>
                 <h3>Last 7 Beneficiaries (Household Size Trend)</h3>
                <ResponsiveContainer>
-      <AreaChart data={donorGraph}>
+      <AreaChart data={beneGraph}>
         <defs>
           <linearGradient id="colorDonor" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#29239c" stopOpacity={0.8} />
@@ -277,7 +277,7 @@ export default function Reports({ isSidebarOpen }) {
               <div style={{ width: "100%", height: 300, marginTop: 40 }}>
                 <h3>Last 7 Stores (Capacity Trend)</h3>
                <ResponsiveContainer>
-      <AreaChart data={donorGraph}>
+      <AreaChart data={storeGraph}>
         <defs>
           <linearGradient id="colorDonor" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#29239c" stopOpacity={0.8} />

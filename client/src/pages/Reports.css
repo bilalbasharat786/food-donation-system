@@ -97,6 +97,7 @@
 }
 .styled-table th, .styled-table td{
   padding: 12px 14px;
+  color: white;
   text-align: left;
 }
 .styled-table thead{
