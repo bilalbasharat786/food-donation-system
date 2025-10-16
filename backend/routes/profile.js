@@ -2,8 +2,38 @@ import express from "express";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
 
 const router = express.Router();
+
+// ✅ Cloudinary Storage Setup
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "user_profiles", // Folder name in Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png"],
+  },
+});
+
+const upload = multer({ storage });
+
+// ✅ Upload/Change Profile Picture
+router.put("/upload-photo", authMiddleware, upload.single("profilePic"), async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.profilePic = req.file.path; // Cloudinary URL
+    await user.save();
+
+    res.json({ message: "Profile picture updated successfully", profilePic: user.profilePic });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Photo upload failed" });
+  }
+});
 
 // ✅ Get Profile
 router.get("/", authMiddleware, async (req, res) => {
@@ -15,7 +45,7 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Update Profile (name, email, password)
+// ✅ Update Profile (same as before)
 router.put("/update", authMiddleware, async (req, res) => {
   try {
     const { name, email, currentPassword, newPassword } = req.body;
@@ -23,11 +53,9 @@ router.put("/update", authMiddleware, async (req, res) => {
 
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // Update name/email
     if (name) user.name = name;
     if (email) user.email = email;
 
-    // ✅ Change password (if provided)
     if (currentPassword && newPassword) {
       const isMatch = await bcrypt.compare(currentPassword, user.password);
       if (!isMatch)
@@ -45,6 +73,7 @@ router.put("/update", authMiddleware, async (req, res) => {
 });
 
 export default router;
+
 
 
 

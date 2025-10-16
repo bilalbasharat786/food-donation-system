@@ -11,6 +11,7 @@ export default function Profile({ isSidebarOpen }) {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [preview, setPreview] = useState(null);
 
   const token = localStorage.getItem("token");
 
@@ -28,12 +29,34 @@ export default function Profile({ isSidebarOpen }) {
         setUser(res.data);
         setName(res.data.name);
         setEmail(res.data.email);
-      } catch (err) {
+      } catch {
         setError("Failed to load profile");
       }
     };
     fetchProfile();
   }, []);
+
+  // ✅ Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profilePic", file);
+
+    try {
+      const res = await axios.put(`${baseURL}api/profile/upload-photo`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setUser({ ...user, profilePic: res.data.profilePic });
+      setMessage(res.data.message);
+    } catch {
+      setError("Failed to upload image");
+    }
+  };
 
   // ✅ Handle profile update
   const handleUpdate = async (e) => {
@@ -41,12 +64,7 @@ export default function Profile({ isSidebarOpen }) {
     try {
       const res = await axios.put(
         `${baseURL}api/profile/update`,
-        {
-          name,
-          email,
-          currentPassword,
-          newPassword,
-        },
+        { name, email, currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessage(res.data.message);
@@ -71,6 +89,19 @@ export default function Profile({ isSidebarOpen }) {
         {message && <p className="success">{message}</p>}
         {error && <p className="error">{error}</p>}
 
+        {/* ✅ Profile Picture */}
+        <div className="profile-pic-section">
+          <img
+            src={preview || user.profilePic}
+            alt="Profile"
+            className="profile-pic"
+          />
+          <label className="upload-btn">
+            Change Photo
+            <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+          </label>
+        </div>
+
         {!editMode ? (
           <>
             <p><strong>Name:</strong> {user.name}</p>
@@ -82,42 +113,20 @@ export default function Profile({ isSidebarOpen }) {
         ) : (
           <form onSubmit={handleUpdate} className="profile-form">
             <label>Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
 
             <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
             <label>Current Password:</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder="Enter current password"
-            />
+            <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
 
             <label>New Password:</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="Enter new password"
-            />
+            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
 
             <div className="form-actions">
               <button type="submit" className="save-btn">Save Changes</button>
-              <button type="button" className="cancel-btn" onClick={() => setEditMode(false)}>
-                Cancel
-              </button>
+              <button type="button" className="cancel-btn" onClick={() => setEditMode(false)}>Cancel</button>
             </div>
           </form>
         )}
@@ -125,5 +134,6 @@ export default function Profile({ isSidebarOpen }) {
     </div>
   );
 }
+
 
 
