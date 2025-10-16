@@ -164,7 +164,7 @@ export default function Dashboard({ isSidebarOpen }) {
         <stop offset="95%" stopColor="#0072ff" stopOpacity={0}/>
       </linearGradient>
       <linearGradient id="colorPrevious" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="#ff512f" stopOpacity={0.7}/>
+        <stop offset="5%" stopColor="#ec579aff" stopOpacity={0.7}/>
         <stop offset="95%" stopColor="#dd2476" stopOpacity={0}/>
       </linearGradient>
     </defs>
