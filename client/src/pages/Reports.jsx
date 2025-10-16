@@ -152,7 +152,7 @@ export default function Reports({ isSidebarOpen }) {
         <Area
           type="monotone"
           dataKey="value"
-          stroke="#29239c"
+          stroke="#00c6ff"
           fill="url(#colorDonor)"
           strokeWidth={3}
         />
@@ -219,7 +219,7 @@ export default function Reports({ isSidebarOpen }) {
         <Area
           type="monotone"
           dataKey="value"
-          stroke="#29239c"
+          stroke="#00c6ff"
           fill="url(#colorDonor)"
           strokeWidth={3}
         />
@@ -298,7 +298,7 @@ export default function Reports({ isSidebarOpen }) {
         <Area
           type="monotone"
           dataKey="value"
-          stroke="#29239c"
+          stroke="#00c6ff"
           fill="url(#colorDonor)"
           strokeWidth={3}
         />
