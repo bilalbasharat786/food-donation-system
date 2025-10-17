@@ -13,6 +13,7 @@ import donationRoutes from "./routes/donation.js";
 import distributionRoutes from "./routes/distribution.js";
 import statsRoutes from "./routes/stats.js";
 import userRoutes from "./routes/profile.js";
+import cloudinary from "./config/cloudinary.js";
 
 dotenv.config();
 const app = express();
