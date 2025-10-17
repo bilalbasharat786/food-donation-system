@@ -28,7 +28,7 @@ router.put("/upload-photo", authMiddleware, upload.single("profilePic"), async (
     user.profilePic = req.file.path; // Cloudinary URL
     await user.save();
 
-    res.json({ message: "Profile picture updated successfully", profilePic: user.profilePic });
+    res.json({ message: "", profilePic: user.profilePic });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Photo upload failed" });
