@@ -87,9 +87,9 @@ export default function Reports({ isSidebarOpen }) {
         <button className="btn" onClick={fetchStores}>
           Stores Report
         </button>
-        <button className="btn secondary" onClick={handlePrint}>
+        {/*<button className="btn secondary" onClick={handlePrint}>
           Print / Export PDF
-        </button>
+        </button>*/}
       </div>
 
       {/* Report Container */}
